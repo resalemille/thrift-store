@@ -5,8 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://resalemille.github.io',
-  base: '/thrift-store',
+  site: 'https://thrift-store.resalemille.online',
 
   vite: {
     plugins: [tailwindcss()],
