@@ -7,8 +7,8 @@
 ## 現在の構成
 
 - Astro 7 / TypeScript strict / Tailwind CSS 4
-- GitHub Pages: `https://hatuzawayuuki-spec.github.io/sample/`
-- 公開パス: `/sample/`
+- GitHub Pages: `https://resalemille.github.io/thrift-store/`
+- 公開パス: `/thrift-store/`
 - 将来のコンテンツ管理: microCMS
 - 将来の問い合わせ送信: Formspree
 
@@ -70,3 +70,7 @@
 - トップのメインコピーが途中で改行されないよう、デスクトップの表示幅と改行制御を調整。
 - トップページに金・貴金属の強化買取セクションを追加。独自生成した静物ビジュアルを `public/images/gold-purchase.png` に配置し、金・貴金属の詳細・相談ページへ誘導する。
 - 傷・破損・付属品なしなど、状態にかかわらず相談できる買取セクションを追加。独自生成した品物の静物ビジュアルを `public/images/condition-purchase.png` に配置し、査定可否・金額は実物と市場状況により案内する旨を明記した。
+
+### 2026-09-16
+
+- リポジトリ移行後のGitHub Pages公開先に合わせて、Astroの `site` を `https://resalemille.github.io`、`base` を `/thrift-store` に更新。生成されるCSS、内部リンク、公開アセット、ファビコンの参照先を新しい公開パスに統一した。
