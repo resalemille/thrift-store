@@ -89,7 +89,15 @@ jobs:
       - name: Bootstrap production site
         if: steps.cache.outputs.bootstrap == 'true'
         working-directory: production
-        run: npm ci && npm run build
+        run: |
+          npm ci
+          # Astro 7.3.2's package archive can omit this config in a fresh install.
+          # Recreate its documented strict configuration only when it is absent.
+          if [ ! -f node_modules/astro/tsconfigs/strict.json ]; then
+            mkdir -p node_modules/astro/tsconfigs
+            printf '%s\n' '{"extends":"./base.json","compilerOptions":{"strict":true}}' > node_modules/astro/tsconfigs/strict.json
+          fi
+          npm run build
         env:
           ASTRO_BASE_PATH: /
       - name: Preserve initial production site
