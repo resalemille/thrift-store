@@ -47,6 +47,7 @@ test('状態にかかわらず相談できる買取セクションを表示す�
   const html = page('index.html');
   assert.match(html, /CONDITION/);
   assert.match(html, /こんな状態のお品物も、まずはご相談ください/);
+  assert.match(html, /lg:whitespace-nowrap">こんな状態のお品物も、まずはご相談ください<\/h2>/);
   assert.match(html, /切れたアクセサリー/);
   assert.match(html, /傷・汚れのあるブランド品/);
   assert.match(html, /動かない時計・カメラ/);

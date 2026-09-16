@@ -1,5 +1,5 @@
 ---
-interface Props { eyebrow?: string; title: string; lead?: string }
-const { eyebrow, title, lead } = Astro.props;
+interface Props { eyebrow?: string; title: string; lead?: string; containerClass?: string; titleClass?: string }
+const { eyebrow, title, lead, containerClass = 'max-w-2xl', titleClass = '' } = Astro.props;
 ---
-<div class="max-w-2xl"><p class="text-xs font-bold tracking-[0.2em] text-emerald-700">{eyebrow}</p><h2 class="mt-3 text-2xl font-bold tracking-tight text-emerald-950 lg:text-4xl">{title}</h2>{lead && <p class="mt-4 leading-8 text-stone-600">{lead}</p>}</div>
+<div class={containerClass}><p class="text-xs font-bold tracking-[0.2em] text-emerald-700">{eyebrow}</p><h2 class={`mt-3 text-2xl font-bold tracking-tight text-emerald-950 lg:text-4xl ${titleClass}`}>{title}</h2>{lead && <p class="mt-4 leading-8 text-stone-600">{lead}</p>}</div>
