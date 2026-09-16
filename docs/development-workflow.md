@@ -38,7 +38,7 @@ GitHub PagesのSourceは **GitHub Actions** のまま使用する。現在は独
 - `preview-cache` はワークフローが初回に作成する保存専用ブランチ。PagesのSourceに設定せず、手動編集しない。本番はルート、各PRは `pr-preview/pr-<番号>/` に保存する。
 - 初回のPR公開でもmainを別途ビルドして本番を保持する。本番更新はプレビューを保持し、PR更新・クローズは対象PRだけを差し替え・削除する。PR用のCNAMEはコピーしない。
 - 本番・PR・削除は共通の `pages` concurrency groupで直列実行する。`queue: max` により待機中の別PRを取り消さない（上限100件）。キュー上限や失敗で未反映の場合は該当Actions実行を再実行する。デプロイ失敗後も保存ブランチは保持され、次回の公開で全体を再送する。
-- `github-pages` EnvironmentのDeployment branchesに `main` と `refs/pull/*/merge`（branch）を許可する。Actionsにはcontents / pages / pull-requestsのwriteとid-tokenのwriteが必要。ビルドジョブはreadのみとし、フォークに書き込み権限を与えない。
+- `github-pages` Environmentは参照しない。既存の環境保護ルールを変更せずにPRの公開を許可するためである。Actionsにはcontents / pages / pull-requestsのwriteとid-tokenのwriteが必要。ビルドジョブはreadのみとし、フォークに書き込み権限を与えない。
 - `ASTRO_BASE_PATH` でビルド時のbaseを切り替える（通常 `/`、PR `/pr-preview/pr-123`）。内部リンク・publicアセットは `src/lib/paths.ts` の `link()` 経由で参照し、公開パスを直接固定しない。
 
 ### 検証
