@@ -34,6 +34,13 @@ test('ヒーローのメインコピーをデスクトップで途中改行し�
   assert.match(html, /class="md:whitespace-nowrap">想いのある品を、次の誰かへ。<\/span><br>/);
 });
 
+test('ヒーロー下部に店舗検索と出張買取予約の大きな導線を表示する', () => {
+  const html = page('index.html');
+  assert.match(html, /min-h-28 items-center justify-center gap-4 bg-amber-300/);
+  assert.match(html, /href="\/thrift-store\/stores\/"[^>]*>.*お店を探す/s);
+  assert.match(html, /href="\/thrift-store\/contact\/"[^>]*>.*出張買取を予約する/s);
+});
+
 test('トップページに金・貴金属の強化買取セクションを表示する', () => {
   const html = page('index.html');
   assert.match(html, /GOLD &amp; PRECIOUS METALS/);
