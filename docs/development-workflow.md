@@ -28,3 +28,21 @@
 ## 例外
 
 緊急修正、リリース作業、または直接 `main` への変更・pushをユーザーが明示的に指示した場合のみ、このフローを省略できます。その場合も、実行した検証内容と直接反映した理由を記録します。
+
+## PRプレビュー（Issue #10）
+
+GitHub PagesのSourceは **GitHub Actions** のまま使用する。現在は独自ドメインのため、本番は `https://thrift-store.resalemille.online/`、PR #123は `https://thrift-store.resalemille.online/pr-preview/pr-123/` となる。Issueに記載された旧 `/sample` の公開先には戻さない。
+
+- 同一リポジトリからmain向けのPRを作成・再オープン・更新すると、検証後にプレビューを公開する。公開完了後のBotコメントから確認でき、更新時は同じコメントを更新する。
+- フォークのPRは公開対象外。プレビューは公開URLなので機密情報を含めない。
+- `preview-cache` はワークフローが初回に作成する保存専用ブランチ。PagesのSourceに設定せず、手動編集しない。本番はルート、各PRは `pr-preview/pr-<番号>/` に保存する。
+- 初回のPR公開でもmainを別途ビルドして本番を保持する。本番更新はプレビューを保持し、PR更新・クローズは対象PRだけを差し替え・削除する。PR用のCNAMEはコピーしない。
+- 本番・PR・削除は共通の `pages` concurrency groupで直列実行する。`queue: max` により待機中の別PRを取り消さない（上限100件）。キュー上限や失敗で未反映の場合は該当Actions実行を再実行する。デプロイ失敗後も保存ブランチは保持され、次回の公開で全体を再送する。
+- `github-pages` EnvironmentのDeployment branchesに `main` と `refs/pull/*/merge`（branch）を許可する。Actionsにはcontents / pages / pull-requestsのwriteとid-tokenのwriteが必要。ビルドジョブはreadのみとし、フォークに書き込み権限を与えない。
+- `ASTRO_BASE_PATH` でビルド時のbaseを切り替える（通常 `/`、PR `/pr-preview/pr-123`）。内部リンク・publicアセットは `src/lib/paths.ts` の `link()` 経由で参照し、公開パスを直接固定しない。
+
+### 検証
+
+`npm test` は既存のページ検証に加え、キャッシュの複数PR共存・更新・本番更新・削除を検証する。さらに `/`、`/sample`、`/sample/pr-preview/pr-123`、`/pr-preview/pr-123` でビルドし、全HTMLの内部リンク・画像・favicon・CSS・JavaScriptが指定base配下にあり、参照先が存在することを確認する。現サイトにはクライアントJavaScriptがないため、テスト中だけ一時ページを作り、Astroが生成する外部JavaScriptのURLも検証してから削除する。
+
+導入PRのマージ後、異なる内容のテストPRを2件開く。両方のBotコメントとトップ・下層ページ、画像、favicon、CSS、JavaScriptの読み込みをブラウザで確認する。一方を更新してコメントが増えないこと、一方を閉じて対象だけが消えること、mainの公開後も残ったプレビューが表示されることを確認する。導入前のmainには新ワークフローがないため、クローズ・main公開を含む一連の確認は導入PRのマージ後に実施する。
