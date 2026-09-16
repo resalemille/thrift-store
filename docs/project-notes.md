@@ -7,8 +7,8 @@
 ## 現在の構成
 
 - Astro 7 / TypeScript strict / Tailwind CSS 4
-- GitHub Pages: `https://resalemille.github.io/thrift-store/`
-- 公開パス: `/thrift-store/`
+- 公開URL: `https://thrift-store.resalemille.online/`
+- 公開パス: `/`（カスタムドメインのルート）
 - 将来のコンテンツ管理: microCMS
 - 将来の問い合わせ送信: Formspree
 
@@ -76,3 +76,4 @@
 - リポジトリ移行後のGitHub Pages公開先に合わせて、Astroの `site` を `https://resalemille.github.io`、`base` を `/thrift-store` に更新。生成されるCSS、内部リンク、公開アセット、ファビコンの参照先を新しい公開パスに統一した。
 - 状態不問の買取相談セクションの見出しを、デスクトップでは一行で表示するよう修正。モバイルでは可読性を保つため自然に改行する。
 - ファーストビュー下部に、店舗一覧とお問い合わせへ遷移する大きな二分割CTAを追加。デスクトップでは横並び、モバイルでは縦並びで表示する。
+- カスタムドメインへの切り替えに合わせて、Astroの `site` を `https://thrift-store.resalemille.online` に更新し、リポジトリ名を含む `base` を削除。CSS、リンク、公開アセットをカスタムドメインのルートから読み込むよう変更し、`public/CNAME` でドメイン設定を保持する。

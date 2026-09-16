@@ -19,14 +19,18 @@ test('主要な静的ページを生成する', () => {
   }
 });
 
-test('GitHub Pages の新しいbase pathを内部リンクとアセットに反映する', () => {
+test('カスタムドメインのルートパスを内部リンクとアセットに反映する', () => {
   const html = page('index.html');
-  assert.match(html, /href="\/thrift-store\/stores\/"/);
-  assert.match(html, /src="\/thrift-store\/images\/hero-shop\.png"/);
-  assert.match(html, /href="\/thrift-store\/_astro\/[^\"]+\.css"/);
-  assert.match(html, /href="\/thrift-store\/favicon\.svg"/);
+  assert.match(html, /href="\/stores\/"/);
+  assert.match(html, /src="\/images\/hero-shop\.png"/);
+  assert.match(html, /href="\/_astro\/[^\"]+\.css"/);
+  assert.match(html, /href="\/favicon\.svg"/);
+  assert.doesNotMatch(html, /\/thrift-store\//);
   assert.doesNotMatch(html, /\/sample\//);
-  assert.doesNotMatch(html, /href="\/stores\//);
+});
+
+test('カスタムドメイン設定をビルド成果物に含める', () => {
+  assert.equal(readFileSync(new URL('../dist/CNAME', import.meta.url), 'utf8').trim(), 'thrift-store.resalemille.online');
 });
 
 test('ヒーローのメインコピーをデスクトップで途中改行しない', () => {
@@ -37,8 +41,8 @@ test('ヒーローのメインコピーをデスクトップで途中改行し�
 test('ヒーロー下部に店舗検索と出張買取予約の大きな導線を表示する', () => {
   const html = page('index.html');
   assert.match(html, /min-h-28 items-center justify-center gap-4 bg-amber-300/);
-  assert.match(html, /href="\/thrift-store\/stores\/"[^>]*>.*お店を探す/s);
-  assert.match(html, /href="\/thrift-store\/contact\/"[^>]*>.*出張買取を予約する/s);
+  assert.match(html, /href="\/stores\/"[^>]*>.*お店を探す/s);
+  assert.match(html, /href="\/contact\/"[^>]*>.*出張買取を予約する/s);
 });
 
 test('トップページに金・貴金属の強化買取セクションを表示する', () => {
@@ -46,8 +50,8 @@ test('トップページに金・貴金属の強化買取セクションを表�
   assert.match(html, /GOLD &amp; PRECIOUS METALS/);
   assert.match(html, /金・貴金属の/);
   assert.match(html, /買取を強化中/);
-  assert.match(html, /src="\/thrift-store\/images\/gold-purchase\.png"/);
-  assert.match(html, /href="\/thrift-store\/items\/gold\/"/);
+  assert.match(html, /src="\/images\/gold-purchase\.png"/);
+  assert.match(html, /href="\/items\/gold\/"/);
 });
 
 test('状態にかかわらず相談できる買取セクションを表示する', () => {
@@ -58,7 +62,7 @@ test('状態にかかわらず相談できる買取セクションを表示す�
   assert.match(html, /切れたアクセサリー/);
   assert.match(html, /傷・汚れのあるブランド品/);
   assert.match(html, /動かない時計・カメラ/);
-  assert.match(html, /src="\/thrift-store\/images\/condition-purchase\.png"/);
+  assert.match(html, /src="\/images\/condition-purchase\.png"/);
   assert.match(html, /お買取りの可否・金額は/);
 });
 
@@ -86,12 +90,12 @@ test('品目詳細に該当品目の買取実績と参考価格を表示する',
   assert.match(watchPage, /参考価格 ¥650,000/);
 });
 
-test('全内部リンクは新しいGitHub Pages配下の生成ページを指す', () => {
+test('全内部リンクはカスタムドメイン配下の生成ページを指す', () => {
   for (const file of htmlFiles(dist.pathname)) {
     const html = readFileSync(file, 'utf8');
     const hrefs = [...html.matchAll(/<a[^>]+href="([^"]+)"/g)].map((match) => match[1]);
-    for (const href of hrefs.filter((href) => href.startsWith('/thrift-store/'))) {
-      const relativePath = href.replace('/thrift-store/', '');
+    for (const href of hrefs.filter((href) => href.startsWith('/') && !href.startsWith('//'))) {
+      const relativePath = href.slice(1);
       const destination = new URL(`../dist/${relativePath}index.html`, import.meta.url);
       assert.equal(existsSync(destination), true, `${file} のリンク先 ${href} が見つかりません`);
     }
