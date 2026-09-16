@@ -97,6 +97,9 @@ jobs:
             mkdir -p node_modules/astro/tsconfigs
             printf '%s\n' '{"extends":"./base.json","compilerOptions":{"strict":true}}' > node_modules/astro/tsconfigs/strict.json
           fi
+          mkdir -p ../node_modules/astro/tsconfigs
+          cp node_modules/astro/tsconfigs/base.json ../node_modules/astro/tsconfigs/base.json
+          cp node_modules/astro/tsconfigs/strict.json ../node_modules/astro/tsconfigs/strict.json
           npm run build
         env:
           ASTRO_BASE_PATH: /
