@@ -3,33 +3,165 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
+    types: [opened, reopened, synchronize, closed]
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
+# Keep the cache read/update/push and deployment in one serial transaction.
 concurrency:
   group: pages
   cancel-in-progress: false
+  queue: max
 
 jobs:
   build:
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
-      - name: Install, build, and upload site
-        uses: withastro/action@v6
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || 'main' }}
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        if: github.event.action != 'closed'
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+        if: github.event.action != 'closed'
+      - run: npm test
+        if: github.event.action != 'closed'
+      - run: npm run build
+        if: github.event.action != 'closed'
+        env:
+          ASTRO_BASE_PATH: ${{ github.event_name == 'pull_request' && format('/pr-preview/pr-{0}', github.event.number) || '/' }}
+      - uses: actions/upload-artifact@v4
+        if: github.event.action != 'closed'
+        with:
+          name: site-build
+          path: dist
+          include-hidden-files: true
+          retention-days: 1
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+      pull-requests: write
     steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@v4
+        if: github.event.action != 'closed'
+        with:
+          name: site-build
+          path: site-build
+      - name: Load or initialize preview cache
+        id: cache
+        shell: bash
+        run: |
+          if git ls-remote --exit-code --heads origin preview-cache; then
+            git fetch origin preview-cache
+            git worktree add cache FETCH_HEAD
+          else
+            result=$?
+            if [ "$result" -ne 2 ]; then exit "$result"; fi
+            git worktree add --detach cache
+            (cd cache && git checkout --orphan preview-cache && git rm -rf .)
+            echo 'bootstrap=true' >> "$GITHUB_OUTPUT"
+          fi
+      - name: Checkout production for initial cache
+        if: steps.cache.outputs.bootstrap == 'true'
+        uses: actions/checkout@v7
+        with:
+          ref: main
+          path: production
+          persist-credentials: false
+      - name: Bootstrap production site
+        if: steps.cache.outputs.bootstrap == 'true'
+        working-directory: production
+        run: |
+          npm ci
+          # Astro 7.3.2's package archive can omit this config in a fresh install.
+          # Recreate its documented strict configuration only when it is absent.
+          if [ ! -f node_modules/astro/tsconfigs/strict.json ]; then
+            mkdir -p node_modules/astro/tsconfigs
+            printf '%s\n' '{"extends":"./base.json","compilerOptions":{"strict":true}}' > node_modules/astro/tsconfigs/strict.json
+          fi
+          mkdir -p ../node_modules/astro/tsconfigs
+          cp node_modules/astro/tsconfigs/base.json ../node_modules/astro/tsconfigs/base.json
+          cp node_modules/astro/tsconfigs/strict.json ../node_modules/astro/tsconfigs/strict.json
+          npm run build
+        env:
+          ASTRO_BASE_PATH: /
+      - name: Preserve initial production site
+        if: steps.cache.outputs.bootstrap == 'true'
+        run: node scripts/update-preview-cache.mjs cache production/dist
+      - name: Update published tree
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_NUMBER: ${{ github.event.number }}
+          GH_TOKEN: ${{ github.token }}
+          PR_SHA: ${{ github.event.pull_request.head.sha }}
+        shell: bash
+        run: |
+          if [ "$EVENT_NAME" = pull_request ]; then
+            # Read current state: an older queued build must not resurrect a closed PR.
+            state=$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER" --jq .state)
+            if [ "$state" = closed ]; then
+              node scripts/update-preview-cache.mjs cache - "$PR_NUMBER"
+            elif [ -d site-build ] && [ "$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER" --jq .head.sha)" = "$PR_SHA" ]; then
+              node scripts/update-preview-cache.mjs cache site-build "$PR_NUMBER"
+            fi
+          else
+            node scripts/update-preview-cache.mjs cache site-build
+          fi
+          cd cache
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add --all
+          if ! git diff --cached --quiet; then
+            git commit -m "Update Pages tree for $GITHUB_SHA"
+          fi
+          git push origin HEAD:preview-cache
+      - name: Prepare complete Pages artifact
+        run: |
+          mkdir published
+          rsync -a --exclude=.git cache/ published/
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: published
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+      - name: Create or update preview comment
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v8
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        with:
+          script: |
+            const issue_number = context.issue.number;
+            const { data: pr } = await github.rest.pulls.get({ ...context.repo, pull_number: issue_number });
+            if (pr.state === 'open' && pr.head.sha !== context.payload.pull_request.head.sha) return;
+            const marker = '<!-- pages-pr-preview -->';
+            const url = `${process.env.PAGE_URL.replace(/\/$/, '')}/pr-preview/pr-${issue_number}/`;
+            const body = pr.state === 'closed'
+              ? `${marker}\nこのPRのプレビューは削除されました。`
+              : `${marker}\nプレビュー: ${url}\n\n更新コミット: ${context.payload.pull_request.head.sha}`;
+            const comments = await github.paginate(github.rest.issues.listComments, { ...context.repo, issue_number });
+            const comment = comments.find(c => c.user.login === 'github-actions[bot]' && c.body?.includes(marker));
+            if (comment) {
+              await github.rest.issues.updateComment({ ...context.repo, comment_id: comment.id, body });
+            } else if (pr.state !== 'closed') {
+              await github.rest.issues.createComment({ ...context.repo, issue_number, body });
+            }
