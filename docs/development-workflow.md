@@ -20,6 +20,8 @@
 
 ## worktree運用ルール
 
+複数Issueをまとめて依頼する場合は [multi-issue-prの使い方と検証](multi-issue-pr.md) を参照する。指定されたIssueごとにsubagentと専用worktreeを分け、依存関係を確認して個別PRを作成する。
+
 - worktreeは依頼ごとに1つ作成し、目的がわかるディレクトリ名にする。
 - 既存の `main` worktreeや、ユーザーが作業中の未コミット変更は変更しない。
 - 作業完了後も、PRがマージまたは破棄されるまではworktreeを保持する。
