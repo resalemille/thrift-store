@@ -1,0 +1,4 @@
+interface:
+  display_name: "Multi Issue PR"
+  short_description: "指定した複数Issueをsubagentで並列対応し、個別PRを作成"
+  default_prompt: "$multi-issue-pr #12 #18 #24 を実行し、IssueごとのPRと検証結果をまとめてください。"
