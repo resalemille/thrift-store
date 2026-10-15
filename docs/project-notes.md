@@ -103,3 +103,11 @@
 - `npm test`: 型検査でエラー・警告なし、25ページ生成、14テスト成功。4種類のbase pathで全生成リンク・アセットの参照先を確認。
 - Chromeで320px・390px・768px・1680px幅を確認し、トップページに横スクロールが発生しないことを確認。390px幅でメニューの開閉と店舗一覧への遷移を確認。
 - デスクトップでトップ・金買取・状態別カードの写真・見出し・枠を確認。モバイルのメインコピーは文節で折り返す。
+
+### 2026-10-15 — Issue #26
+
+- 金・貴金属バナーの金塊を、黒いベルベットの上に2本を離して平置きした構図へ修正。不自然な重なりをなくし、左側のコピー用余白と金貨・ジュエリーを維持する。
+- 使用画像は `public/images/gold-resale-mille.webp`（2172×724）。組み込みの画像生成ツールで既存写真を編集し、WebPへ変換する。
+- 生成プロンプト: Use case: precise-object-edit. Edit target: the supplied wide website photograph (2172x724, 3:1). Correct ONLY the gold ingots in the upper right. Replace the physically ambiguous stack with TWO separate gold ingots lying flat independently side by side on the black velvet, both fully supported by the cloth, with a visible narrow gap, consistent perspective and contact shadows. No stacked bars, no leaning bars, no intersecting bars, no floating objects. Preserve the original wide 3:1 composition, all the empty gold satin on the left for website copy, black velvet on the right, existing coins and jewelry positions and appearance, warm luxury studio lighting and realistic photography. No added text, no watermark. Return the completed wide photograph.
+- 画像のWebP形式・HTML指定寸法・配信ファイルの一致を自動検証。変換後の画像が2172×724であること、および金塊の接地と重なりを確認した。
+- `npm test` 成功（型検査エラー・警告なし、26ページ、22テスト、4種類のbase path）。`npm run lint` 成功（既存の情報レベル指摘1件）。

@@ -113,6 +113,22 @@ test('トップページに金・貴金属の強化買取セクションを表�
   assert.match(html, /href="\/items\/gold\/"/);
 });
 
+test('金買取バナーのWebP画像を変更せず配信する', () => {
+  const source = readFileSync(
+    new URL('../public/images/gold-resale-mille.webp', import.meta.url),
+  );
+  const published = readFileSync(
+    new URL('../dist/images/gold-resale-mille.webp', import.meta.url),
+  );
+  assert.equal(source.toString('ascii', 0, 4), 'RIFF');
+  assert.equal(source.toString('ascii', 8, 12), 'WEBP');
+  assert.deepEqual(published, source);
+  assert.match(
+    page('index.html'),
+    /src="\/images\/gold-resale-mille\.webp"[^>]*width="2172"[^>]*height="724"/,
+  );
+});
+
 test('状態にかかわらず相談できる買取セクションを表示する', () => {
   const html = page('index.html');
   assert.match(html, /CONDITION/);
