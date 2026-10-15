@@ -1,5 +1,5 @@
 ---
 import Layout from '../../layouts/Layout.astro'; import PageHero from '../../components/PageHero.astro';
-const rows = [['会社名', '株式会社つなぐ屋（ダミー）'], ['所在地', '東京都千代田区神田○○ 1-2-3'], ['代表者', '代表取締役 山田 太郎'], ['設立', '2020年4月'], ['事業内容', 'リユース品の買取・販売'], ['古物商許可番号', '東京都公安委員会 第000000000000号（ダミー）']];
+const rows = [['会社名', '買取のResale Mille（リセールミル）（ダミー）'], ['所在地', '東京都千代田区神田○○ 1-2-3'], ['代表者', '代表取締役 山田 太郎'], ['設立', '2020年4月'], ['事業内容', 'リユース品の買取・販売'], ['古物商許可番号', '東京都公安委員会 第000000000000号（ダミー）']];
 ---
-<Layout title="会社概要"><PageHero title="会社概要" lead="つなぐ屋の会社情報です。現在の掲載内容はすべてダミーです。" eyebrow="COMPANY" /><section class="mx-auto max-w-4xl px-5 py-16"><dl class="divide-y divide-stone-200 border-y border-stone-200">{rows.map(([label, value]) => <div class="grid gap-2 py-5 sm:grid-cols-[11rem_1fr]"><dt class="font-bold text-stone-500">{label}</dt><dd class="text-emerald-950">{value}</dd></div>)}</dl></section></Layout>
+<Layout title="会社概要"><PageHero title="会社概要" lead="買取のResale Mille（リセールミル）の会社情報です。現在の掲載内容はすべてダミーです。" eyebrow="COMPANY" /><section class="mx-auto max-w-4xl px-5 py-16"><dl class="divide-y divide-stone-200 border-y border-stone-200">{rows.map(([label, value]) => <div class="grid gap-2 py-5 sm:grid-cols-[11rem_1fr]"><dt class="font-bold text-stone-500">{label}</dt><dd class="text-ink-950">{value}</dd></div>)}</dl></section></Layout>

@@ -30,19 +30,19 @@ export type Case = {
 };
 
 export const site = {
-	name: '買取専門 つなぐ屋',
-	shortName: 'つなぐ屋',
+	name: '買取のResale Mille（リセールミル）',
+	shortName: 'Resale Mille',
 	tel: '0120-000-000',
-	catch: '想いのある品を、次の誰かへ。',
+	catch: 'あなたの「想い」を、次の世代へ繋ぐ。',
 };
 
 export const items: Item[] = [
-	{ slug: 'brand', name: 'ブランド品', description: 'バッグ・財布・小物など', icon: '👜', color: 'bg-rose-50' },
-	{ slug: 'watch', name: '腕時計', description: '高級時計から国産時計まで', icon: '⌚', color: 'bg-sky-50' },
-	{ slug: 'jewelry', name: '宝石・ジュエリー', description: 'ダイヤ・指輪・ネックレスなど', icon: '💎', color: 'bg-violet-50' },
-	{ slug: 'gold', name: '金・貴金属', description: '金・プラチナ・コインなど', icon: '✨', color: 'bg-amber-50' },
-	{ slug: 'camera', name: 'カメラ', description: 'フィルム・デジタル問わず', icon: '📷', color: 'bg-emerald-50' },
-	{ slug: 'antique', name: '骨董品・古美術', description: '絵画・茶道具・陶磁器など', icon: '🏺', color: 'bg-orange-50' },
+	{ slug: 'brand', name: 'ブランド品', description: 'バッグ・財布・小物など', icon: '👜', color: 'bg-gold-50' },
+	{ slug: 'watch', name: '腕時計', description: '高級時計から国産時計まで', icon: '⌚', color: 'bg-gold-50' },
+	{ slug: 'jewelry', name: '宝石・ジュエリー', description: 'ダイヤ・指輪・ネックレスなど', icon: '💎', color: 'bg-gold-50' },
+	{ slug: 'gold', name: '金・貴金属', description: '金・プラチナ・コインなど', icon: '✨', color: 'bg-gold-50' },
+	{ slug: 'camera', name: 'カメラ', description: 'フィルム・デジタル問わず', icon: '📷', color: 'bg-ink-50' },
+	{ slug: 'antique', name: '骨董品・古美術', description: '絵画・茶道具・陶磁器など', icon: '🏺', color: 'bg-gold-50' },
 ];
 
 export const brands = ['エルメス', 'ルイ・ヴィトン', 'シャネル', 'カルティエ', 'ロレックス', 'オメガ', 'グッチ', 'ティファニー'];
