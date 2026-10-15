@@ -1,0 +1,230 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ConsignmentIcon from '../../components/ConsignmentIcon.astro';
+import ConsignmentContacts from '../../components/ConsignmentContacts.astro';
+import { consignmentFaqs } from '../../data/consignment';
+import { site } from '../../data/site';
+import { link } from '../../lib/paths';
+
+const features = [
+  {
+    title: ['お申し込みはLINEで簡単', '最短5分で査定完了'],
+    image: 'phone', alt: 'スマートフォンで相談する様子',
+    text: 'LINE友だち追加後、時計の写真を撮影しトークでお送りください。ブランド名・名称・型番・付属品・使用状態などの詳しい情報をご入力いただければ、より明確な販売金額をお伝えいたします。査定結果は最短5分でお届け！お気軽にお申し込みください。',
+  },
+  {
+    title: ['お預かり不要で安心', '売却までご自宅で保管'],
+    image: 'storage', alt: '自宅の木製ケースに保管された腕時計',
+    text: '時計のお預かりは商品撮影時のみ。その後は大切な時計をお客様のお手元で、ご成約までご自宅で保管しながら出品することが可能です。',
+  },
+  {
+    title: ['手数料は業界最安値2.8%〜', '高値・早期のご成約'],
+    image: 'boutique', alt: '腕時計のショーケースが並ぶ落ち着いた店舗',
+    text: '手数料は業界最安値の2.8％。また、弊社が国内外に持つ広範な販売経路を活用し、時計を早期に高値で売却することが可能です。',
+    note: '※現金決済の場合',
+  },
+];
+const comparisons = [
+  { label: '時計のお預かり', cells: ['撮影時のみ', '必要', '必要', '必要'], marks: ['◎', '○', '○', '○'] },
+  { label: '保管場所', cells: ['ご自宅', '店舗', '店舗', '店舗'], marks: ['◎', '○', '○', '○'] },
+  { label: '手数料', cells: ['※2.8%', '3%（800万以上）', '7%', '相談'], marks: ['◎', '×', '×', '×'] },
+  { label: '販売価格', cells: ['ご相談の上決定', '不明', '不明', '相談'], marks: ['◎', '×', '×', '◎'] },
+  { label: '販売方法', cells: ['ECサイト', '店頭・ECサイト', '店頭・ECサイト', '店頭・ECサイト'], marks: ['○', '○', '○', '○'] },
+];
+---
+<Layout title="委託販売・スマート委託" description={`${site.name}のスマート委託。大切な時計をご自宅で保管したまま販売できる、新しい委託販売のスタイル。手数料2.8%〜。`}>
+  <div class="consignment">
+    <nav class="breadcrumb" aria-label="パンくずリスト"><a href={link('/')}>TOP</a><span aria-hidden="true">›</span><span aria-current="page">スマート委託</span></nav>
+
+    <section class="introduction" aria-labelledby="consignment-title">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <h1 id="consignment-title">預かり不要のスマート委託</h1>
+          <div class="hero-tagline"><div class="fee-badge">手数料<strong>2.8<span>%〜</span></strong>業界最安値</div><p>大切な時計をお手元に置いたまま売る、<br />新しい委託販売のスタイル</p></div>
+        </div>
+        <img class="hero-image" src={link('/images/consignment/hero.png')} alt="緑のケースに入った腕時計を手渡す様子" width="1448" height="1086" fetchpriority="high" />
+      </div>
+      <div class="introduction-copy">
+        <p>{site.name}の「スマート委託」は、通常の委託販売と違い、<br class="desktop-break" />大切な時計を販売店に預けずにご自宅で保管したまま販売できる、画期的な委託販売システムです。</p>
+        <p><mark>手数料は業界最安値の2.8%</mark>、販売価格はご希望の手取り額と相場をもとに、ご相談の上決定いたします。</p>
+        <p class="second-paragraph">お申し込み・査定はお電話もしくはLINEで簡単に行えます。<br class="desktop-break" />また、弊社は国内外に多数の独自販売経路を持っているため、高値かつ早期の売却が期待できます。<br class="desktop-break" />ぜひご利用ください。</p>
+      </div>
+      <a class="consult-link" href="#consignment-contact">ご相談・お申し込み</a>
+    </section>
+
+    <section class="features dark-panel" aria-labelledby="features-title">
+      <h2 id="features-title" class="section-heading">スマート委託の特徴</h2>
+      <div class="feature-grid">
+        {features.map(feature => <article>
+          <h3>{feature.title[0]}<br />{feature.title[1]}</h3>
+          <img src={link(`/images/consignment/${feature.image}.png`)} alt={feature.alt} width="1672" height="941" loading="lazy" />
+          <p>{feature.text}</p>
+          {feature.note && <small>{feature.note}</small>}
+        </article>)}
+      </div>
+    </section>
+
+    <section class="comparison" aria-labelledby="comparison-title">
+      <h2 id="comparison-title" class="section-heading">スマート委託と他社の委託販売との比較</h2>
+      <p class="section-lead">{site.name}のスマート委託は他社と比べて便利で安心。<br />手数料も業界最安値に設定しています。</p>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="委託販売の比較表。狭い画面では横にスクロールできます">
+        <table>
+          <caption class="sr-only">スマート委託と他社の委託販売の比較</caption>
+          <colgroup><col class="label-column" /><col class="our-column" /><col /><col /><col /></colgroup>
+          <thead><tr><td></td><th scope="col">{site.name}</th><th scope="col">A社</th><th scope="col">B社</th><th scope="col">C社</th></tr></thead>
+          <tbody>{comparisons.map(row => <tr><th scope="row">{row.label}</th>{row.cells.map((cell, index) => <td><span class="cell-content"><span class="comparison-mark" aria-hidden="true">{row.marks[index]}</span><span>{cell}</span></span></td>)}</tr>)}</tbody>
+        </table>
+      </div>
+      <p class="table-note">※現金決済の場合</p>
+    </section>
+
+    <section class="flow dark-panel" aria-labelledby="flow-title">
+      <h2 id="flow-title" class="section-heading">ご利用の流れ</h2>
+      <ol class="steps">
+        <li><span class="step-number">STEP 1</span><h3>お申込み</h3><div class="step-icon contact-icons"><ConsignmentIcon name="line" /><ConsignmentIcon name="phone" /></div><p>お申し込みはLINE・メール・お電話でお気軽にご相談下さい。</p><ConsignmentContacts compact /></li>
+        <li><span class="step-number">STEP 2</span><h3>お預かり・撮影</h3><div class="step-icon"><ConsignmentIcon name="camera" /></div><p>郵送またはご来店にて時計をお預かりし、状態の確認と販売用の写真撮影を行います。</p><p>スマート委託の場合は、撮影後3日以内にお客様へご返却いたします。</p></li>
+        <li><span class="step-number">STEP 3</span><h3>価格決定・出品</h3><div class="step-icon"><ConsignmentIcon name="watch" /></div><p>販売希望価格をうかがい、商品の状態と相場を基に手数料を決定します。</p><p>決定後は当店のECサイト等に出品いたします。</p><p>スマート委託にて現物確認のご依頼があった場合は、1週間以内に商品をご郵送ください。</p></li>
+        <li><span class="step-number">STEP 4</span><h3>ご成約・ご入金</h3><div class="step-icon"><ConsignmentIcon name="handshake" /></div><p>成約した場合は、商品をご郵送いただくか、お持ち込みください。委託手続き・{site.name}へ購入代金入金後にご納品いたします。</p><p>商品代金は金融機関にて3営業日以内にご入金いたします。</p></li>
+      </ol>
+    </section>
+
+    <section class="faq" aria-labelledby="faq-title">
+      <h2 id="faq-title" class="section-heading">よくあるご質問</h2>
+      <div class="faq-list">{consignmentFaqs.map(faq => <details><summary><span class="question-label" aria-hidden="true">Q</span><span>{faq.question}</span><span class="chevron" aria-hidden="true"></span></summary><p>{faq.answer}</p></details>)}</div>
+    </section>
+
+    <section id="consignment-contact" class="contact dark-panel" aria-labelledby="contact-title">
+      <img class="contact-watch" src={link('/images/consignment/watch.png')} alt="" width="1024" height="1536" loading="lazy" />
+      <h2 id="contact-title" class="section-heading">ご相談・お申し込み</h2>
+      <p class="section-lead">お気軽にご相談ください！</p>
+      <ConsignmentContacts />
+      <p class="reception-hours">受付時間 11:00〜20:00　年中無休（年末年始除く）</p>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .consignment { --gold: #b5a77a; position: relative; isolation: isolate; overflow: hidden; color: #fff; background: #292929; padding: 0 3.3% 48px; font-weight: 600; font-size: 14px; line-height: 1.75; }
+  .consignment::before { content: ''; position: absolute; inset: 0; z-index: -2; opacity: .23; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23fff' filter='url(%23n)' opacity='.32' d='M0 0h180v180H0z'/%3E%3C/svg%3E"); }
+  .consignment::after { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(158deg, transparent 0 27%, #77777712 27% 43%, transparent 43% 65%, #77777716 65% 78%, transparent 78%); }
+  .breadcrumb { display: flex; gap: 12px; align-items: center; max-width: 1180px; margin: 0 auto; padding: 10px 0 28px; font-size: 10px; }
+  a { color: inherit; }
+  a:focus-visible, summary:focus-visible, .table-scroll:focus-visible { outline: 2px solid var(--gold); outline-offset: 5px; }
+  .introduction { position: relative; max-width: 980px; margin: 0 auto; padding-bottom: 48px; }
+  .introduction::before, .flow::before { content: 'SMART'; position: absolute; z-index: -1; left: 50%; transform: translateX(-50%); color: #ffffff08; font: 800 clamp(100px, 25vw, 380px)/1 Arial, sans-serif; letter-spacing: -.04em; pointer-events: none; }
+  .introduction::before { top: 220px; }
+  .hero-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 38px; align-items: center; }
+  h1 { margin: 0 0 26px; font-size: clamp(24px, 3.5vw, 42px); line-height: 1.45; font-weight: 800; letter-spacing: -.03em; }
+  .hero-tagline { display: flex; align-items: center; gap: 20px; }
+  .hero-tagline p { line-height: 2.3; margin: 0; font-size: 15px; }
+  .fee-badge { flex: 0 0 86px; padding: 7px 3px; color: #c3b685; border: 1px solid var(--gold); text-align: center; font-size: 12px; line-height: 1.4; }
+  .fee-badge strong { display: block; font-size: 28px; line-height: 1.1; }
+  .fee-badge strong span { font-size: 15px; }
+  .hero-image { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; }
+  .introduction-copy { margin: 38px auto 30px; text-align: center; line-height: 1.9; font-size: 13px; }
+  .introduction-copy p { margin: 0; }
+  .introduction-copy .second-paragraph { margin-top: 14px; }
+  mark { background: #b5a77a99; color: white; }
+  .consult-link { display: flex; align-items: center; justify-content: center; max-width: 292px; min-height: 48px; margin: 0 auto; border: 1px solid var(--gold); color: #c3b685; text-decoration: none; font-size: 15px; }
+  .dark-panel { position: relative; max-width: 1180px; margin: 0 auto; background: #09090980; }
+  .section-heading { width: fit-content; position: relative; max-width: 100%; margin: 0 auto 40px; padding-bottom: 16px; text-align: center; font-size: clamp(23px, 2.6vw, 30px); font-weight: 800; line-height: 1.5; }
+  .section-heading::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 160px; max-width: 75%; height: 1px; background: var(--gold); }
+  .features { padding: 48px 8.4% 62px; }
+  .feature-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px; }
+  .feature-grid h3 { min-height: 50px; margin: 0 0 16px; text-align: center; font-size: 16px; line-height: 1.5; font-weight: 700; }
+  .feature-grid img { width: 100%; height: auto; aspect-ratio: 1.78; object-fit: cover; }
+  .feature-grid p { margin: 14px 0 0; font-size: 13px; line-height: 1.8; }
+  small { font-size: 10px; }
+  .comparison { max-width: 980px; margin: 0 auto; padding: 48px 0 44px; }
+  .section-lead { margin: 0 0 44px; color: inherit; text-align: center; font-size: 14px; line-height: 1.8; }
+  .comparison .section-heading { margin-bottom: 38px; }
+  .table-scroll { overflow-x: auto; }
+  table { width: 100%; min-width: 620px; border-collapse: collapse; table-layout: fixed; text-align: left; font-size: 13px; line-height: 1.5; }
+  .label-column { width: 18%; }
+  .our-column { width: 26%; background: #18181855; }
+  th, td { border: 1px solid #131313; padding: 17px 13px; vertical-align: middle; }
+  thead td { border: 0; background: transparent; }
+  thead th { background: #555555a6; text-align: center; }
+  thead th:nth-child(2) { background: #a69c75; border-color: var(--gold); }
+  tbody th { background: #70707080; font-weight: 600; }
+  tbody td { background: #55555566; }
+  tbody td:nth-child(2) { background: #18181855; border: 1px solid var(--gold); }
+  tbody tr:nth-child(3) td:nth-child(2) { color: #c8bb87; font-size: 23px; font-weight: 800; }
+  .cell-content { display: flex; align-items: center; gap: 12px; }
+  .comparison-mark { color: #b5a77a; font-size: 24px; font-weight: 400; }
+  .table-note { margin: 6px 0 0; text-align: right; font-size: 10px; }
+  .flow { padding: 50px 8% 48px; }
+  .flow::before { top: -70px; }
+  .steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; padding: 0; margin: 60px 0 0; list-style: none; }
+  .steps li { position: relative; border: 1px solid #aca99a; padding: 27px 13px 19px; }
+  .steps li:not(:last-child)::after { content: ''; position: absolute; top: 48%; right: -22px; border-left: 12px solid #a9a698; border-top: 14px solid transparent; border-bottom: 14px solid transparent; }
+  .step-number { position: absolute; top: -13px; left: 50%; transform: translateX(-50%); padding: 0 12px; white-space: nowrap; background: #1c1c1c; color: #b5a77a; font-size: 16px; font-weight: 700; }
+  .steps h3 { margin: 0; text-align: center; font-size: 16px; font-weight: 700; }
+  .step-icon { display: flex; align-items: center; justify-content: center; min-height: 85px; color: #b5a77a; }
+  .step-icon :global(svg) { width: 63px; height: 63px; }
+  .contact-icons :global(svg) { width: 43px; height: 43px; }
+  .steps p { margin: 0 0 19px; font-size: 13px; line-height: 1.8; text-align: center; overflow-wrap: anywhere; }
+  .steps p:last-child { margin-bottom: 0; }
+  .faq { max-width: 800px; margin: 0 auto; padding: 52px 0; }
+  .faq-list { display: grid; gap: 14px; }
+  .faq details { border: 1px solid #a4a091; background: #22222255; }
+  .faq summary { display: flex; align-items: center; gap: 18px; min-height: 60px; padding: 17px; cursor: pointer; list-style: none; font-size: 14px; }
+  .question-label { color: #bdaf7f; font-size: 22px; font-weight: 400; line-height: 1; }
+  .chevron { width: 7px; height: 7px; margin-left: auto; margin-right: 5px; flex: 0 0 auto; border-right: 1px solid var(--gold); border-bottom: 1px solid var(--gold); transform: rotate(45deg); }
+  details[open] .chevron { transform: rotate(225deg); }
+  .faq details p { border-top: 1px solid #a4a09166; margin: 0; padding: 18px 20px 22px 51px; font-size: 14px; font-weight: 400; line-height: 1.9; }
+  .contact { margin-top: 0; padding: 50px 8% 48px; scroll-margin-top: 110px; }
+  .contact-watch { position: absolute; width: 145px; height: 205px; object-fit: contain; right: 15%; top: -45px; pointer-events: none; }
+  .contact .section-heading { margin-bottom: 36px; }
+  .contact .section-lead { margin-bottom: 44px; }
+  .reception-hours { text-align: center; margin: 6px 0 0; font-size: 9px; }
+  @media (min-width: 1500px) { .consignment { padding-inline: calc((100% - 1180px) / 2); } }
+  @media (max-width: 900px) {
+    .hero-grid { gap: 22px; grid-template-columns: 1.5fr 1fr; }
+    .hero-tagline { gap: 12px; }
+    .hero-tagline p { font-size: 12px; }
+    .fee-badge { flex-basis: 72px; font-size: 10px; }
+    .features, .flow, .contact { padding-left: 6%; padding-right: 6%; }
+    .feature-grid { gap: 20px; }
+    .feature-grid h3 { font-size: 14px; }
+    .steps { gap: 22px; }
+    .steps li { padding-inline: 10px; }
+    .steps h3 { font-size: 14px; }
+    .steps p { font-size: 12px; }
+    .steps li:not(:last-child)::after { right: -18px; border-left-width: 10px; border-top-width: 12px; border-bottom-width: 12px; }
+    .contact-watch { right: 7%; width: 110px; }
+  }
+  @media (max-width: 680px) {
+    .consignment { padding-inline: 20px; padding-bottom: 28px; }
+    .breadcrumb { padding-bottom: 20px; }
+    .hero-grid { grid-template-columns: 1fr; gap: 24px; }
+    h1 { font-size: clamp(23px, 6.3vw, 34px); margin-bottom: 20px; }
+    .hero-tagline { justify-content: center; gap: 15px; }
+    .hero-tagline p { font-size: 12px; }
+    .hero-image { max-height: 310px; aspect-ratio: 1.5; }
+    .introduction-copy { font-size: 13px; text-align: left; }
+    .desktop-break { display: none; }
+    .introduction { padding-bottom: 32px; }
+    .section-heading { font-size: 23px; margin-bottom: 30px; }
+    .features, .flow, .contact { padding: 35px 20px; }
+    .feature-grid { grid-template-columns: 1fr; gap: 32px; }
+    .feature-grid h3 { min-height: 0; font-size: 16px; }
+    .feature-grid p { font-size: 14px; }
+    .comparison { padding-block: 36px; }
+    .section-lead { font-size: 13px; margin-bottom: 30px; }
+    th, td { padding: 14px 10px; }
+    .steps { grid-template-columns: 1fr; gap: 34px; margin-top: 42px; }
+    .steps li { padding: 26px 20px; }
+    .steps h3 { font-size: 17px; }
+    .steps p { font-size: 14px; }
+    .steps li:not(:last-child)::after { top: auto; bottom: -24px; right: calc(50% - 12px); border-top: 12px solid #a9a698; border-left: 12px solid transparent; border-right: 12px solid transparent; border-bottom: 0; }
+    .faq { padding-block: 36px 50px; }
+    .faq summary { gap: 12px; padding: 16px 12px; font-size: 13px; }
+    .faq details p { padding-left: 20px; }
+    .contact { padding-top: 105px; }
+    .contact-watch { width: 105px; height: 150px; right: calc(50% - 52px); top: -38px; }
+    .contact .section-heading { font-size: 23px; margin-bottom: 26px; }
+    .contact .section-lead { margin-bottom: 30px; }
+    .reception-hours { margin-top: 15px; font-size: 10px; }
+  }
+</style>

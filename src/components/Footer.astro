@@ -6,7 +6,7 @@ import { site } from '../data/site';
 <footer class="bg-ink-950 text-white">
 	<div class="mx-auto grid max-w-7xl gap-10 px-5 py-14 lg:grid-cols-[1.4fr_1fr_1fr] lg:px-8">
 		<div><p class="text-xl font-bold tracking-[0.15em]">{site.name}</p><p class="mt-4 text-sm leading-7 text-ink-100">大切にされてきた品物を、次の方へつなぐお手伝いをします。査定・ご相談は無料です。</p><a href={`tel:${site.tel.replaceAll('-', '')}`} class="mt-5 inline-block text-2xl font-bold">{site.tel}</a><p class="text-xs text-ink-200">受付時間 10:00〜19:00</p></div>
-		<div><p class="mb-4 text-sm font-bold text-ink-200">SERVICE</p><ul class="grid gap-3 text-sm text-ink-50"><li><a href={link('/stores/')}>店舗を探す</a></li><li><a href={link('/items/')}>買取品目</a></li><li><a href={link('/cases/')}>買取実績</a></li><li><a href={link('/faq/')}>よくある質問</a></li></ul></div>
+		<div><p class="mb-4 text-sm font-bold text-ink-200">SERVICE</p><ul class="grid gap-3 text-sm text-ink-50"><li><a href={link('/stores/')}>店舗を探す</a></li><li><a href={link('/items/')}>買取品目</a></li><li><a href={link('/cases/')}>買取実績</a></li><li><a href={link('/consignment/')}>委託販売</a></li><li><a href={link('/faq/')}>よくある質問</a></li></ul></div>
 		<div><p class="mb-4 text-sm font-bold text-ink-200">COMPANY</p><ul class="grid gap-3 text-sm text-ink-50"><li><a href={link('/news/')}>お知らせ</a></li><li><a href={link('/company/')}>会社概要</a></li><li><a href={link('/privacy/')}>プライバシーポリシー</a></li><li><a href={link('/contact/')}>お問い合わせ</a></li></ul></div>
 	</div>
 	<div class="border-t border-ink-800 px-5 py-5 text-center text-xs text-ink-200">© 2026 {site.name} <span class="ml-2">※掲載内容はすべてダミーです。</span></div>
