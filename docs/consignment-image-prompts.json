@@ -1,0 +1,30 @@
+{
+  "tool": "Built-in image_gen",
+  "assets": [
+    {
+      "key": "hero",
+      "transparent": false,
+      "prompt": "Use case: photorealistic-natural. Asset type: landscape hero photograph for a Japanese luxury watch consignment webpage. Primary request: close-up of a salesperson in a dark suit gently handing an open dark emerald green luxury watch presentation box with cream velvet interior and a silver wristwatch inside to a customer's hands. Boutique counter background softly blurred. Composition: 4:3 landscape, green box upper center, hands entering from both lower sides, crop out faces. Natural premium product photography, restrained charcoal, emerald and champagne colors. No words, no logos, no watermark. Create only this one photograph."
+    },
+    {
+      "key": "phone",
+      "transparent": false,
+      "prompt": "Use case: photorealistic-natural. Asset type: landscape feature-card photograph for luxury watch consignment. Primary request: cropped side view of a businessperson in a dark navy suit holding and using a smartphone with both hands, standing inside a quiet premium boutique, daylight through a window. No face visible. Composition 16:9 landscape with smartphone and hands centered, shallow depth of field, understated warm brown and charcoal tones. Realistic editorial photograph, no text, no logos, no watermark. Only this one photograph."
+    },
+    {
+      "key": "storage",
+      "transparent": false,
+      "prompt": "Use case: product-mockup. Asset type: landscape feature-card photo for luxury watch consignment. Primary request: elegant silver and champagne gold bracelet wristwatch resting inside an open dark wooden watch box lined with beige suede, on a dark wooden dresser in a private home. Composition 16:9 landscape, close-up of watch and open box; watch centered, luxurious warm natural lighting, detailed materials, subtle depth of field. No writing, logos, watermark, or humans. Only one photograph."
+    },
+    {
+      "key": "boutique",
+      "transparent": false,
+      "prompt": "Use case: photorealistic-natural. Asset type: landscape feature-card photograph. Primary request: interior of an elegant Japanese luxury watch boutique, dark charcoal walls, champagne metal framed illuminated glass display cases running along the back and right wall, warm white lighting, tidy polished floor, inviting but sophisticated. Composition wide 16:9, view diagonally into boutique from entrance, no people. Realistic architectural photography, no words, logos or watermark. Only one photograph."
+    },
+    {
+      "key": "watch",
+      "transparent": true,
+      "prompt": "Use case: product-mockup. Asset type: isolated decorative product cutout for a luxury consignment contact panel. Primary request: a single elegant yellow gold chronograph wristwatch with black dial and gold bracelet, complete entire watch visible, three-quarter front view tilted approximately 15 degrees clockwise, bracelet partly curved. High-end studio product photography, realistic gold reflections, sharp detail. Composition portrait with comfortable padding around all sides; no shadows extending far outside watch. Transparent background with genuine alpha, no words, no brand names, no logos, no watermark. Only the wristwatch."
+    }
+  ]
+}
