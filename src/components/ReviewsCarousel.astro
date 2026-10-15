@@ -110,30 +110,30 @@ for (const section of document.querySelectorAll<HTMLElement>(
   );
   const status = section.querySelector<HTMLElement>('[data-review-status]');
   if (!track || !controls || !previous || !next || !status) continue;
-  let active = 0;
-  const update = () => {
-    const center = track.getBoundingClientRect().left + track.clientWidth / 2;
-    let nearest = 0;
-    let distance = Infinity;
-    cards.forEach((card, index) => {
-      const rect = card.getBoundingClientRect();
-      const delta = Math.abs(rect.left + rect.width / 2 - center);
-      if (delta < distance) {
-        nearest = index;
-        distance = delta;
-      }
-    });
-    active = nearest;
-    dots.forEach((dot, index) => {
-      if (index === active) dot.setAttribute('aria-current', 'true');
-      else dot.removeAttribute('aria-current');
-    });
-    previous.disabled = active === 0;
-    next.disabled = active === cards.length - 1;
-    status.textContent = `${cards.length}件中${active + 1}件目の口コミ`;
+  // 前後に一周分の表示用カードを置き、端を越えたら同じ見た目の中央周へ戻す。
+  // 複製は読み上げ・フォーカス対象にせず、IDも重複させない。
+  const clone = (card: HTMLElement) => {
+    const copy = card.cloneNode(true) as HTMLElement;
+    copy.inert = true;
+    copy.setAttribute('aria-hidden', 'true');
+    copy.removeAttribute('id');
+    copy.removeAttribute('aria-labelledby');
+    for (const element of copy.querySelectorAll('[id]'))
+      element.removeAttribute('id');
+    return copy;
   };
-  const show = (index: number, instant = false) => {
-    const card = cards[index];
+  for (const card of cards) track.insertBefore(clone(card), cards[0]);
+  for (const card of cards) track.append(clone(card));
+  const slides = Array.from(
+    track.querySelectorAll<HTMLElement>('.review-card'),
+  );
+  const count = cards.length;
+  let active = 0;
+  let physical = count;
+  let touching = false;
+  let settleTimer: ReturnType<typeof setTimeout>;
+  const move = (index: number, instant = false) => {
+    const card = slides[index];
     if (!card) return;
     const rect = card.getBoundingClientRect();
     track.scrollTo({
@@ -148,6 +148,41 @@ for (const section of document.querySelectorAll<HTMLElement>(
           : 'smooth',
     });
   };
+  const update = () => {
+    const center = track.getBoundingClientRect().left + track.clientWidth / 2;
+    let distance = Infinity;
+    slides.forEach((card, index) => {
+      const rect = card.getBoundingClientRect();
+      const delta = Math.abs(rect.left + rect.width / 2 - center);
+      if (delta < distance) {
+        physical = index;
+        distance = delta;
+      }
+    });
+    active = physical % count;
+    dots.forEach((dot, index) => {
+      if (index === active) dot.setAttribute('aria-current', 'true');
+      else dot.removeAttribute('aria-current');
+    });
+    status.textContent = `${count}件中${active + 1}件目の口コミ`;
+  };
+  const settle = () => {
+    if (touching) return;
+    update();
+    if (physical < count || physical >= count * 2) {
+      physical = count + active;
+      move(physical, true);
+    }
+  };
+  const scheduleSettle = () => {
+    clearTimeout(settleTimer);
+    settleTimer = setTimeout(settle, 150);
+  };
+  const show = (index: number) => {
+    // 中央周へ揃えてから隣へ進むため、何周しても同じ方向へ動く。
+    settle();
+    move(physical + index - active);
+  };
   previous.addEventListener('click', () => show(active - 1));
   next.addEventListener('click', () => show(active + 1));
   dots.forEach((dot, index) => {
@@ -159,11 +194,32 @@ for (const section of document.querySelectorAll<HTMLElement>(
       show(active + (event.key === 'ArrowRight' ? 1 : -1));
     }
   });
-  track.addEventListener('scroll', update, { passive: true });
+  track.addEventListener(
+    'scroll',
+    () => {
+      update();
+      scheduleSettle();
+    },
+    { passive: true },
+  );
+  track.addEventListener('scrollend', settle);
+  track.addEventListener('pointerdown', () => {
+    touching = true;
+  });
+  window.addEventListener('pointerup', () => {
+    touching = false;
+    scheduleSettle();
+  });
+  window.addEventListener('pointercancel', () => {
+    touching = false;
+    scheduleSettle();
+  });
   new ResizeObserver(() => {
-    show(active, true);
+    physical = count + active;
+    move(physical, true);
     update();
   }).observe(track);
+  move(count, true);
   controls.hidden = false;
   update();
 }
