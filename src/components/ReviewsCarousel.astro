@@ -17,40 +17,42 @@ import { reviews } from '../data/reviews';
     aria-label="口コミ一覧"
     tabindex="0"
   >
-    {reviews.map((review, index) => (
-      <article
-        class="review-card gold-frame"
-        id={`review-${index + 1}`}
-        aria-labelledby={`review-title-${index + 1}`}
-      >
-        <div class="review-heading">
-          <svg
-            class="review-person"
-            viewBox="0 0 80 80"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            aria-hidden="true"
-          >
-            <circle cx="40" cy="25" r="15" />
-            <path d="M12 75v-9a28 28 0 0 1 56 0v9M26 22q14-20 28 0M34 29q6 6 12 0M24 74V62m32 12V62" />
-          </svg>
-          <h3 id={`review-title-${index + 1}`}>{review.title}</h3>
-          <p class="review-profile">
-            {review.location}
-            <br />
-            {review.age}
+    <div class="reviews-container">
+      {reviews.map((review, index) => (
+        <article
+          class="review-card gold-frame"
+          id={`review-${index + 1}`}
+          aria-labelledby={`review-title-${index + 1}`}
+        >
+          <div class="review-heading">
+            <svg
+              class="review-person"
+              viewBox="0 0 80 80"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <circle cx="40" cy="25" r="15" />
+              <path d="M12 75v-9a28 28 0 0 1 56 0v9M26 22q14-20 28 0M34 29q6 6 12 0M24 74V62m32 12V62" />
+            </svg>
+            <h3 id={`review-title-${index + 1}`}>{review.title}</h3>
+            <p class="review-profile">
+              {review.location}
+              <br />
+              {review.age}
+            </p>
+          </div>
+          <p class="review-rating">
+            <span>評価</span>
+            <span role="img" aria-label="5点満点中5点">
+              ★★★★★
+            </span>
           </p>
-        </div>
-        <p class="review-rating">
-          <span>評価</span>
-          <span role="img" aria-label="5点満点中5点">
-            ★★★★★
-          </span>
-        </p>
-        <p class="review-body">{review.body}</p>
-      </article>
-    ))}
+          <p class="review-body">{review.body}</p>
+        </article>
+      ))}
+    </div>
   </section>
   <div class="reviews-controls" hidden>
     <button
@@ -95,13 +97,12 @@ import { reviews } from '../data/reviews';
 </section>
 
 <script>
+import EmblaCarousel from 'embla-carousel';
+
 for (const section of document.querySelectorAll<HTMLElement>(
   '[data-reviews]',
 )) {
   const track = section.querySelector<HTMLElement>('.reviews-track');
-  const cards = Array.from(
-    section.querySelectorAll<HTMLElement>('.review-card'),
-  );
   const controls = section.querySelector<HTMLElement>('.reviews-controls');
   const previous = section.querySelector<HTMLButtonElement>('[data-previous]');
   const next = section.querySelector<HTMLButtonElement>('[data-next]');
@@ -110,116 +111,37 @@ for (const section of document.querySelectorAll<HTMLElement>(
   );
   const status = section.querySelector<HTMLElement>('[data-review-status]');
   if (!track || !controls || !previous || !next || !status) continue;
-  // 前後に一周分の表示用カードを置き、端を越えたら同じ見た目の中央周へ戻す。
-  // 複製は読み上げ・フォーカス対象にせず、IDも重複させない。
-  const clone = (card: HTMLElement) => {
-    const copy = card.cloneNode(true) as HTMLElement;
-    copy.inert = true;
-    copy.setAttribute('aria-hidden', 'true');
-    copy.removeAttribute('id');
-    copy.removeAttribute('aria-labelledby');
-    for (const element of copy.querySelectorAll('[id]'))
-      element.removeAttribute('id');
-    return copy;
-  };
-  for (const card of cards) track.insertBefore(clone(card), cards[0]);
-  for (const card of cards) track.append(clone(card));
-  const slides = Array.from(
-    track.querySelectorAll<HTMLElement>('.review-card'),
-  );
-  const count = cards.length;
-  let active = 0;
-  let physical = count;
-  let touching = false;
-  let settleTimer: ReturnType<typeof setTimeout>;
-  const move = (index: number, instant = false) => {
-    const card = slides[index];
-    if (!card) return;
-    const rect = card.getBoundingClientRect();
-    track.scrollTo({
-      left:
-        track.scrollLeft +
-        rect.left -
-        track.getBoundingClientRect().left -
-        (track.clientWidth - rect.width) / 2,
-      behavior:
-        instant || window.matchMedia('(prefers-reduced-motion: reduce)').matches
-          ? 'instant'
-          : 'smooth',
-    });
-  };
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  track.classList.add('is-enhanced');
+  const carousel = EmblaCarousel(track, { loop: true, align: 'center' });
   const update = () => {
-    const center = track.getBoundingClientRect().left + track.clientWidth / 2;
-    let distance = Infinity;
-    slides.forEach((card, index) => {
-      const rect = card.getBoundingClientRect();
-      const delta = Math.abs(rect.left + rect.width / 2 - center);
-      if (delta < distance) {
-        physical = index;
-        distance = delta;
-      }
-    });
-    active = physical % count;
+    const active = carousel.selectedScrollSnap();
     dots.forEach((dot, index) => {
       if (index === active) dot.setAttribute('aria-current', 'true');
       else dot.removeAttribute('aria-current');
     });
-    status.textContent = `${count}件中${active + 1}件目の口コミ`;
+    status.textContent = `${dots.length}件中${active + 1}件目の口コミ`;
   };
-  const settle = () => {
-    if (touching) return;
-    update();
-    if (physical < count || physical >= count * 2) {
-      physical = count + active;
-      move(physical, true);
-    }
-  };
-  const scheduleSettle = () => {
-    clearTimeout(settleTimer);
-    settleTimer = setTimeout(settle, 150);
-  };
-  const show = (index: number) => {
-    // 中央周へ揃えてから隣へ進むため、何周しても同じ方向へ動く。
-    settle();
-    move(physical + index - active);
-  };
-  previous.addEventListener('click', () => show(active - 1));
-  next.addEventListener('click', () => show(active + 1));
+  previous.addEventListener('click', () =>
+    carousel.scrollPrev(reducedMotion.matches),
+  );
+  next.addEventListener('click', () =>
+    carousel.scrollNext(reducedMotion.matches),
+  );
   dots.forEach((dot, index) => {
-    dot.addEventListener('click', () => show(index));
+    dot.addEventListener('click', () =>
+      carousel.scrollTo(index, reducedMotion.matches),
+    );
   });
   track.addEventListener('keydown', (event) => {
     if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
       event.preventDefault();
-      show(active + (event.key === 'ArrowRight' ? 1 : -1));
+      if (event.key === 'ArrowRight')
+        carousel.scrollNext(reducedMotion.matches);
+      else carousel.scrollPrev(reducedMotion.matches);
     }
   });
-  track.addEventListener(
-    'scroll',
-    () => {
-      update();
-      scheduleSettle();
-    },
-    { passive: true },
-  );
-  track.addEventListener('scrollend', settle);
-  track.addEventListener('pointerdown', () => {
-    touching = true;
-  });
-  window.addEventListener('pointerup', () => {
-    touching = false;
-    scheduleSettle();
-  });
-  window.addEventListener('pointercancel', () => {
-    touching = false;
-    scheduleSettle();
-  });
-  new ResizeObserver(() => {
-    physical = count + active;
-    move(physical, true);
-    update();
-  }).observe(track);
-  move(count, true);
+  carousel.on('select', update).on('reInit', update);
   controls.hidden = false;
   update();
 }
@@ -240,30 +162,28 @@ for (const section of document.querySelectorAll<HTMLElement>(
 }
 .reviews-track {
   --card-width: min(700px, 76%);
+  max-width: 1440px;
+  margin-inline: auto;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  padding-block: 34px 24px;
+}
+.reviews-track.is-enhanced {
+  overflow: hidden;
+}
+.reviews-container {
   display: flex;
   align-items: stretch;
-  gap: 32px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  overscroll-behavior-x: contain;
-  padding: 34px calc((100% - var(--card-width)) / 2) 24px;
-  scrollbar-width: thin;
-  scrollbar-color: #ae9865 transparent;
+}
+.reviews-track.is-enhanced .reviews-container {
+  touch-action: pan-y pinch-zoom;
+  user-select: none;
 }
 .review-card {
   flex: 0 0 var(--card-width);
   min-width: 0;
-  scroll-snap-align: center;
+  margin-right: 32px;
   padding: 28px 36px 32px;
-}
-/* Percentage flex-basis resolves against the track content box; use viewport-independent sizing. */
-.reviews-track {
-  padding-inline: 0;
-}
-.reviews-track::before,
-.reviews-track::after {
-  content: "";
-  flex: 0 0 max(0px, calc((100% - var(--card-width)) / 2 - 32px));
 }
 .review-heading {
   display: grid;
@@ -370,14 +290,10 @@ for (const section of document.querySelectorAll<HTMLElement>(
   }
   .reviews-track {
     --card-width: 86%;
-    gap: 16px;
     padding-block: 28px 20px;
   }
-  .reviews-track::before,
-  .reviews-track::after {
-    flex-basis: max(0px, calc((100% - var(--card-width)) / 2 - 16px));
-  }
   .review-card {
+    margin-right: 16px;
     padding: 20px 20px 24px;
   }
   .review-heading {
