@@ -59,7 +59,7 @@ GitHub PagesのSourceは **GitHub Actions** のまま使用する。現在は独
 3. `npm run format:check`: 整形漏れの検出（書き換えなし）。
 4. `npm test`: Astroの型・テンプレート検証、静的ビルド、ページ・公開パスの検証。
 
-`npm run check` と `npm run build` は個別にも実行できる。Biomeは `astro check` の代替ではない。GitHub ActionsへのBiome追加は別Issueの対象とする。
+`npm run check` と `npm run build` は個別にも実行できる。Biomeは `astro check` の代替ではない。GitHub Actionsでも同じBiomeコマンドを実行する（Issue #9）。
 
 対象は `biome.json` の `files.includes` で管理する。`src/` のAstro・TypeScript・JavaScript・CSS・JSON、`scripts/`、`tests/`、ルートのJSON・MJS設定、および `docs/` の対応形式を検査する。Gitの除外設定も利用し、依存関係・生成物（`node_modules/`、`dist/`、`.astro/`）、自動生成の `package-lock.json`、画像は除外する。
 
@@ -74,3 +74,12 @@ main向けPR（フォークを含む）、mainへのpush、手動実行で `Fron
 テスト成功後にのみ公開用ビルドとPagesデプロイを実行する。失敗時はActionsの `Frontend tests` ログを確認し、修正をpushして成功を確認する。フォークPRはテストのみで公開しない。PRクローズ時はテストを省略し、既存のプレビュー削除を実行する。
 
 マージ前にPRのChecksで `Frontend tests` の成功を確認する。必須チェックによるマージ制限はワークフローとは別設定であり、管理者がSettings → Rules → Rulesets（またはBranchesの保護ルール）でmainを対象に `Frontend tests` を必須ステータスチェックへ追加する。権限がない場合は管理者へ依頼する。
+
+
+## BiomeのCI検証（Issue #9）
+
+main向けPR（フォークを含む）、mainへのpush、`workflow_dispatch`による手動実行で、`Biome lint` と `Biome format:check` が実行される。Node.js 22と `npm ci` で固定バージョンを導入し、それぞれ `npm run lint`、`npm run format:check` を実行する。一方が失敗してももう一方のチェックを続行し、両方の結果を確認できる。
+
+PRのChecksで `Frontend tests` に加えて両方のBiomeチェックの成功を確認する。失敗時は該当チェックのActionsログを確認し、lint違反を修正、または `npm run format` で整形してpushする。両Biomeチェックとテストが成功した場合のみ公開用ビルド・Pagesデプロイへ進む。PRクローズ時は検証を省略し、プレビュー削除を実行する。
+
+マージを保護する場合は、mainのルールセットで `Biome lint` と `Biome format:check` も必須ステータスチェックへ追加する。ワークフローだけではマージ操作は制限しない。

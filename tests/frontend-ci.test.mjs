@@ -18,7 +18,7 @@ test('CI uses Node 22 and runs the complete test script before publication', () 
   assert.match(testJob, /node-version: 22/);
   assert.match(testJob, /run: npm ci\n {6}- run: npm test/);
   assert.doesNotMatch(testJob, /head.repo.full_name/);
-  assert.match(buildJob, /needs: test/);
+  assert.match(buildJob, /needs: \[test, biome\]/);
   assert.match(deployJob, /needs: build/);
   assert.match(deployJob, /!cancelled\(\) && needs.build.result == 'success'/);
 });
@@ -35,28 +35,47 @@ test('failed tests block publication; fork PRs never publish; close still cleans
   );
   for (const event of ['push', 'workflow_dispatch', 'pull_request']) {
     for (const result of ['success', 'failure', 'cancelled', 'skipped']) {
-      const github = {
-        event_name: event,
-        repository: 'owner/repo',
-        event: {
-          action: 'synchronize',
-          pull_request: { head: { repo: { full_name: 'owner/repo' } } },
-        },
-      };
-      assert.equal(
-        evaluate(github, { test: { result } }, () => false),
-        result === 'success',
-      );
-      assert.equal(
-        evaluate(github, { test: { result } }, () => true),
-        false,
-      );
-      if (event === 'pull_request') {
-        github.event.pull_request.head.repo.full_name = 'fork/repo';
+      for (const biomeResult of [
+        'success',
+        'failure',
+        'cancelled',
+        'skipped',
+      ]) {
+        const github = {
+          event_name: event,
+          repository: 'owner/repo',
+          event: {
+            action: 'synchronize',
+            pull_request: { head: { repo: { full_name: 'owner/repo' } } },
+          },
+        };
         assert.equal(
-          evaluate(github, { test: { result } }, () => false),
+          evaluate(
+            github,
+            { test: { result }, biome: { result: biomeResult } },
+            () => false,
+          ),
+          result === 'success' && biomeResult === 'success',
+        );
+        assert.equal(
+          evaluate(
+            github,
+            { test: { result }, biome: { result: biomeResult } },
+            () => true,
+          ),
           false,
         );
+        if (event === 'pull_request') {
+          github.event.pull_request.head.repo.full_name = 'fork/repo';
+          assert.equal(
+            evaluate(
+              github,
+              { test: { result }, biome: { result: biomeResult } },
+              () => false,
+            ),
+            false,
+          );
+        }
       }
     }
   }
@@ -69,8 +88,26 @@ test('failed tests block publication; fork PRs never publish; close still cleans
     },
   };
   assert.equal(
-    evaluate(closed, { test: { result: 'skipped' } }, () => false),
+    evaluate(
+      closed,
+      { test: { result: 'skipped' }, biome: { result: 'skipped' } },
+      () => false,
+    ),
     true,
   );
   assert.match(testJob, /if: github.event.action != 'closed'/);
+});
+
+test('Biome checks run separately for all PRs and report both failures', () => {
+  const biomeJob = workflow.split('  biome:\n')[1].split('\n  test:')[0];
+  assert.match(biomeJob, /name: Biome \$\{\{ matrix.command \}\}/);
+  assert.match(biomeJob, /if: github.event.action != 'closed'/);
+  assert.match(biomeJob, /fail-fast: false/);
+  assert.match(biomeJob, /command: \[lint, 'format:check'\]/);
+  assert.match(biomeJob, /node-version: 22/);
+  assert.match(
+    biomeJob,
+    /run: npm ci\n {6}- run: npm run \$\{\{ matrix.command \}\}/,
+  );
+  assert.doesNotMatch(biomeJob, /continue-on-error|head.repo.full_name/);
 });
