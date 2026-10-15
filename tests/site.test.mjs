@@ -316,3 +316,28 @@ test('確定した3店舗の情報・写真と新URLを表示する', () => {
   }
   assert.doesNotMatch(list, /掲載情報はすべてダミーです/);
 });
+
+test('口コミ4件を指定の位置に表示し手動操作を用意する', () => {
+  const html = page('index.html');
+  const start = html.indexOf('id="reviews-title"');
+  assert.ok(html.indexOf('買取実績') < start);
+  assert.ok(start < html.indexOf('はじめての方も、安心してご相談ください'));
+  const section = html.slice(
+    html.lastIndexOf('<section', start),
+    html.indexOf('HOW IT WORKS', start),
+  );
+  for (const title of [
+    '買取り店の印象がかなり変わりました',
+    '女性スタッフがとてもよかった',
+    '思った以上の値段でした',
+    '高級時計じゃなくても丁寧に応対してくれた',
+  ]) {
+    assert.ok(section.includes(title));
+  }
+  assert.equal((section.match(/class="review-card /g) ?? []).length, 4);
+  assert.equal((section.match(/class="review-dot"/g) ?? []).length, 4);
+  assert.match(section, /aria-label="前の口コミ"/);
+  assert.match(section, /aria-label="次の口コミ"/);
+  assert.match(section, /aria-label="5点満点中5点"/);
+  assert.doesNotMatch(section, /サンプル|参考：|こやし屋/);
+});
