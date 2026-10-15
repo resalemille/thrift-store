@@ -207,3 +207,16 @@ test('新しい写真アセットと全ページ共通のブランド配色を�
     '暗い店舗案内に読みやすい見出し色を指定する',
   );
 });
+
+test('店舗・出張買取の完全予約制を案内し、予約不要の表示を残さない', () => {
+  assert.match(page('index.html'), /完全予約制で待ち時間なし/);
+  assert.match(page('index.html'), /店舗・出張買取は事前にご予約ください/);
+  assert.match(page('faq/index.html'), /出張買取ともに完全予約制です/);
+  assert.match(page('stores/kanda/index.html'), /完全予約制/);
+  for (const file of htmlFiles(dist.pathname)) {
+    assert.doesNotMatch(
+      readFileSync(file, 'utf8'),
+      /予約不要|予約なしでもOK|ご予約なしでご利用いただけます|お気軽にお立ち寄りください/,
+    );
+  }
+});
