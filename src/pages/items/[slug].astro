@@ -1,7 +1,9 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import CaseCard from '../../components/CaseCard.astro';
-import { cases, items } from '../../data/site';
+import { cases } from '../../data/cases';
+import { items } from '../../data/items';
+import { casesForItem } from '../../lib/cases.ts';
 import { link } from '../../lib/paths';
 export function getStaticPaths() {
   return items.map((item) => ({
@@ -10,9 +12,7 @@ export function getStaticPaths() {
   }));
 }
 const { item } = Astro.props;
-const purchaseExamples = cases.filter(
-  (purchaseCase) => purchaseCase.item === item.name,
-);
+const purchaseExamples = casesForItem(cases, item.name);
 ---
 
 <Layout title={item.name}>

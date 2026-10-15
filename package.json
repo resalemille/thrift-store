@@ -9,12 +9,13 @@
     "dev": "astro dev",
     "build": "astro build",
     "check": "astro check",
-    "test": "npm run check && npm run build && node --test tests/*.test.mjs && node scripts/test-base-paths.mjs",
+    "test": "npm run test:unit && npm run check && npm run build && node --test tests/*.test.mjs && node scripts/test-base-paths.mjs",
     "preview": "astro preview",
     "astro": "astro",
     "lint": "biome lint . --error-on-warnings",
     "format:check": "biome format .",
-    "format": "biome format --write ."
+    "format": "biome format --write .",
+    "test:unit": "node --experimental-strip-types --test tests/unit/*.test.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
