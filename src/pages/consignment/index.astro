@@ -62,7 +62,7 @@ const comparisons = [
       '販売者が格安に決定',
       '販売者が格安に決定',
     ],
-    marks: ['◎', '×', '×', '×'],
+    marks: ['◎', '×', '×', '◎'],
   },
   {
     label: '販売方法',
@@ -82,34 +82,29 @@ const comparisons = [
       ><span aria-current="page">委託販売</span>
     </nav>
 
-    <section class="introduction" aria-labelledby="consignment-title">
-      <div class="hero-grid">
-        <div class="hero-copy">
-          <h1 id="consignment-title">大切なお品物を、価値ある委託販売へ</h1>
-          <div class="hero-tagline">
-            <div class="fee-badge">
-              手数料<strong>1<span>%〜</span></strong>業界最安値
-            </div>
-            <p>腕時計・ブランド品・ジュエリーの<br>売れる最高値を目指して</p>
-          </div>
+    <section
+      class="home-hero consignment-hero"
+      aria-labelledby="consignment-title"
+    >
+      <img
+        src={link('/images/hero-resale-mille.webp')}
+        alt="時計やバッグ、ジュエリーのある落ち着いた空間"
+        class="hero-photo"
+        width="2172"
+        height="724"
+        fetchpriority="high"
+      >
+      <div class="hero-content">
+        <h1 id="consignment-title">
+          <span>大切なお品物を、</span><span>価値ある委託販売へ。</span>
+        </h1>
+        <p>腕時計・ブランド品・ジュエリーの委託販売　{site.shortName}</p>
+        <div class="hero-actions">
+          <a href={link('/contact/')} class="framed-button"
+            >無料でWeb査定・ご相談<span aria-hidden="true">›</span></a
+          >
         </div>
-        <img
-          class="hero-image"
-          src={link('/images/consignment/watch-cutout.png')}
-          alt="ローズゴールドの腕時計"
-          width="1024"
-          height="1536"
-          fetchpriority="high"
-        >
       </div>
-      <div class="introduction-copy">
-        <p>{site.name}の委託販売は、大切なお品物の売れる最高値を追求します。</p>
-        <p>
-          <mark>手数料は業界最安値の1%から</mark
-          >。販売額と手数料の内訳を明記し、ご相談のうえ販売価格を決定します。
-        </p>
-      </div>
-      <a class="consult-link" href={link('/contact/')}>無料でWeb査定・ご相談</a>
     </section>
 
     <section class="features silk-panel" aria-labelledby="features-title">
@@ -209,6 +204,7 @@ const comparisons = [
           </tbody>
         </table>
       </section>
+      <p class="table-note">※現金決済の場合</p>
     </section>
 
     <section class="flow dark-panel" aria-labelledby="flow-title">
@@ -218,9 +214,9 @@ const comparisons = [
           <span class="step-number">STEP 1</span>
           <h3>お申込み</h3>
           <div class="step-icon contact-icons">
-            <ConsignmentIcon name="mail" />
+            <ConsignmentIcon name="line" /><ConsignmentIcon name="phone" />
           </div>
-          <p>無料のWeb査定・ご相談フォームからお気軽にお申し込みください。</p>
+          <p>お申し込みはLINE・メール・お電話でお気軽にご相談下さい。</p>
           <ConsignmentContacts compact />
         </li>
         <li>
@@ -228,7 +224,7 @@ const comparisons = [
           <h3>お預かり・撮影</h3>
           <div class="step-icon"><ConsignmentIcon name="camera" /></div>
           <p>
-            郵送にてお品物をお預かりし、状態の確認と販売用の写真撮影を行います。
+            郵送にて時計をお預かりし、状態の確認と販売用の写真撮影を行います。
           </p>
         </li>
         <li>
@@ -294,6 +290,23 @@ const comparisons = [
 </Layout>
 
 <style>
+.consignment-hero {
+  margin-inline: -3.54%;
+}
+.consignment-hero .framed-button {
+  color: #594621;
+}
+.consignment-hero h1 {
+  font-size: clamp(23px, 3.4vw, 46px);
+}
+.consignment-hero .hero-actions {
+  grid-template-columns: minmax(0, 360px);
+  justify-content: center;
+}
+.consignment-categories .ornament-title {
+  margin-bottom: 24px;
+}
+
 .consignment {
   --gold: #b5a77a;
   position: relative;

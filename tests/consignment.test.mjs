@@ -14,7 +14,7 @@ test('委託販売ページはサイト名でサービスと比較表を案内�
     /<title[^>]*>委託販売 \| 買取のResale Mille（リセールミル）<\/title>/,
   );
   for (const text of [
-    '大切なお品物を、価値ある委託販売へ',
+    '価値ある委託販売へ。',
     'の委託販売が選ばれる理由',
     '他社の委託販売との比較',
     'ご利用の流れ',
@@ -23,7 +23,7 @@ test('委託販売ページはサイト名でサービスと比較表を案内�
   ]) {
     assert.ok(main.includes(text), `${text} がない`);
   }
-  assert.match(main, /手数料は業界最安値の1%から/);
+  assert.match(main, /業界最安値、手数料は1%から/);
   assert.match(
     main,
     /<th scope="col"[^>]*>買取のResale Mille（リセールミル）<\/th>/,
@@ -31,16 +31,27 @@ test('委託販売ページはサイト名でサービスと比較表を案内�
   assert.doesNotMatch(main, /TIME\s*GRACE|つなぐ屋|03-5801-5888/i);
 });
 
-test('相談導線はWeb相談に統一し、4ステップと既存の保管条件を維持する', () => {
+test('冒頭だけWeb相談1ボタンとし、既存の連絡先・4ステップ・保管条件を維持する', () => {
   assert.equal([...main.matchAll(/href="\/contact\/"/g)].length, 6);
-  assert.doesNotMatch(
-    main,
-    /href="tel:|page\.line\.me|スマート委託|2\.8[%％]|SMART|またはご来店/,
+  assert.equal([...main.matchAll(/href="tel:0463642885"/g)].length, 2);
+  assert.equal(
+    [...main.matchAll(/href="https:\/\/page\.line\.me\//g)].length,
+    2,
   );
+  const hero = main.match(
+    /<section[^>]*consignment-hero[\s\S]*?<\/section>/,
+  )[0];
+  assert.equal([...hero.matchAll(/<a /g)].length, 1);
+  assert.match(hero, /hero-resale-mille\.webp/);
+  assert.doesNotMatch(hero, /watch-cutout|hero-grid|店舗を|出張買取/);
+  assert.equal([...main.matchAll(/watch-cutout\.png/g)].length, 1);
+  assert.match(main, /※現金決済の場合/);
+  assert.match(main, /お申し込みはLINE・メール・お電話/);
+  assert.doesNotMatch(main, /スマート委託|2\.8[%％]|SMART|またはご来店/);
   assert.equal([...main.matchAll(/class="step-number"/g)].length, 4);
   assert.match(main, /撮影時のみ/);
   assert.match(main, /ご自宅/);
-  assert.match(main, /郵送にてお品物をお預かり/);
+  assert.match(main, /郵送にて時計をお預かり/);
   for (const text of [
     '腕時計',
     'ブランド品',

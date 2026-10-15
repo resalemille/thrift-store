@@ -1,4 +1,5 @@
 ---
+import ConsignmentIcon from './ConsignmentIcon.astro';
 import { link } from '../lib/paths';
 interface Props {
   compact?: boolean;
@@ -7,34 +8,91 @@ const { compact = false } = Astro.props;
 ---
 
 <div class:list={['consignment-contacts', { compact }]}>
-  <a href={link('/contact/')}
-    >無料でWeb査定・ご相談<span aria-hidden="true">›</span></a
+  <a class="contact-mail" href={link('/contact/')}
+    ><ConsignmentIcon name="mail" />
+    <span>{compact ? 'メールフォーム' : 'メールでお問い合わせ'}</span></a
+  >
+  <a class="contact-phone" href="tel:0463642885"
+    ><ConsignmentIcon name="phone" /><span>0463-64-2885</span></a
+  >
+  <a
+    class="contact-line"
+    href="https://page.line.me/408epxtk?oat_content=url&openQrModal=true"
+    ><ConsignmentIcon name="line" />
+    <span>{compact ? 'LINE友だち追加' : 'LINEでお問い合わせ'}</span></a
   >
 </div>
 <style>
 .consignment-contacts {
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2rem;
 }
 a {
+  min-height: 58px;
   display: flex;
-  align-items: center;
   justify-content: center;
-  gap: 1rem;
-  min-height: 56px;
-  padding: 12px 28px;
-  border: 3px double #b5a77a;
-  background: #fffdf8;
-  color: #594621;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.8rem 0.6rem;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  color: white;
   text-decoration: none;
+  font-size: clamp(0.8rem, 1.3vw, 1rem);
   font-weight: 700;
 }
 a:focus-visible {
-  outline: 3px solid #b5a77a;
-  outline-offset: 4px;
+  outline: 3px solid white;
+  outline-offset: 5px;
+}
+a :global(svg) {
+  width: 27px;
+  height: 27px;
+  flex: 0 0 auto;
+}
+.contact-mail {
+  background: #a69c75;
+}
+.contact-phone {
+  border-color: #b2a575;
+  color: #c4b780;
+  font-size: clamp(1rem, 1.7vw, 1.3rem);
+  font-weight: 500;
+}
+.contact-line {
+  background: #29bf55;
+}
+.contact-line :global(svg) {
+  fill: white;
+  color: #29bf55;
+  stroke-width: 2px;
+}
+.compact {
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
 }
 .compact a {
-  padding: 8px 12px;
-  font-size: 12px;
+  min-height: 40px;
+  padding: 0.4rem;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+}
+.compact a :global(svg) {
+  width: 22px;
+  height: 22px;
+}
+@media (max-width: 680px) {
+  .consignment-contacts {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+  a {
+    min-height: 54px;
+    font-size: 1rem;
+  }
+  .contact-phone {
+    font-size: 1.25rem;
+  }
 }
 </style>
