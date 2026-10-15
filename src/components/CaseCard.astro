@@ -7,7 +7,7 @@ const { item } = Astro.props as { item: Case };
 <article
   class="overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm"
 >
-  <div class="h-44 bg-white">
+  <div class="bg-white pt-5">
     <img
       src={link(item.image)}
       alt={item.imageAlt}
@@ -15,7 +15,7 @@ const { item } = Astro.props as { item: Case };
       height={item.imageHeight}
       loading="lazy"
       decoding="async"
-      class="h-full w-full object-contain"
+      class="h-44 w-full object-contain"
     >
   </div>
   <div class="p-5">

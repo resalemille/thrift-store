@@ -40,6 +40,10 @@ test('全6件の指定写真を一覧・詳細・品目別に表示し、店舗�
       assert.ok(homeCard.includes(`/ ${store}`));
       surfaces.push(homeCard);
     }
+    for (const html of surfaces.filter((html) => html !== detail)) {
+      assert.match(html, /class="bg-white pt-5"/);
+      assert.match(html, /class="h-44 w-full object-contain"/);
+    }
     for (const html of surfaces) {
       const tag = [...html.matchAll(/<img\b[^>]*>/g)]
         .map(([img]) => img)
