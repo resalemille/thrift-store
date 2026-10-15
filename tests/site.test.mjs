@@ -70,7 +70,7 @@ test('参考画像のヒーローコピーと3つの相談導線を表示する'
   );
   assert.deepEqual(links, [
     ['/contact/', '無料でWeb査定・ご相談'],
-    ['/stores/', '店舗を探す'],
+    ['/stores/', '店舗を予約する'],
     ['/contact/', '出張買取を予約する'],
   ]);
 });
@@ -225,7 +225,7 @@ test('新しい写真アセットと全ページ共通のブランド配色を�
 });
 
 test('店舗・出張買取の完全予約制を案内し、予約不要の表示を残さない', () => {
-  assert.match(page('index.html'), /完全予約制で待ち時間なし/);
+  assert.match(page('index.html'), /完全予約制でスムーズなご案内/);
   assert.match(page('index.html'), /店舗・出張買取は事前にご予約ください/);
   assert.match(page('faq/index.html'), /出張買取ともに完全予約制です/);
   assert.match(page('stores/ginza/index.html'), /完全予約制/);
@@ -340,4 +340,25 @@ test('口コミ4件を指定の位置に表示し手動操作を用意する', (
   assert.match(section, /aria-label="次の口コミ"/);
   assert.match(section, /aria-label="5点満点中5点"/);
   assert.doesNotMatch(section, /サンプル|参考：|こやし屋/);
+});
+
+test('店舗予約の表記と紹介文を表示し、既存の相談導線を維持する', () => {
+  for (const file of htmlFiles(dist.pathname)) {
+    const html = readFileSync(file, 'utf8');
+    assert.doesNotMatch(html, /店舗を探す|待ち時間なし/);
+    assert.match(html, /href="\/stores\/"[^>]*>店舗を予約する/);
+  }
+  const list = page('stores/index.html');
+  assert.match(list, /<h1[^>]*>店舗を予約する<\/h1>/);
+  assert.ok(
+    list.includes(
+      'お近くの買取のResale Mille（リセールミル）の店舗をお選びいただけます。ご来店は完全予約制です。お品物について事前にお伺いし、スムーズな査定と、安心してご相談いただける丁寧なサービスをご提供します。',
+    ),
+  );
+  for (const slug of ['ginza', 'hiratsuka', 'yokohama']) {
+    assert.match(
+      page(`stores/${slug}/index.html`),
+      /href="\/contact\/"[^>]*>この店舗に相談する/,
+    );
+  }
 });
