@@ -122,3 +122,21 @@
 - 検証: `npm test` で型エラー・警告なし、26ページ生成、23テスト成功。4種類のbase pathで内部リンク・画像・アセットを検証。`npm run lint` / `npm run format:check` 成功（lintは既存スクリプトのinfo 1件のみ）。銀座店の写真と情報配置をブラウザーで確認。
 
 - 写真の追加調整: 銀座店・横浜店の左右の黒帯をCSSの表示範囲で除外。支給画像自体は保持し、写真部分の縦横比と位置を指定して建物全体を表示する。平塚店は元の全体表示を維持。
+
+### 2026-10-15 — Issue #26
+
+- 金・貴金属バナーを、実際の商品撮影に近い落ち着いた質感の画像へ差し替え。2本の薄い金塊を離して平置きし、金属の反射・接地影・布の織り目を自然にした。ジュエリーはチェーン・リング・ペンダントに整理し、金貨2枚を添える。
+- 左側にコピー用の余白を確保し、過度なオレンジ色・強い輪郭の光・不自然な表面模様を抑えた。
+- 使用画像は `public/images/gold-resale-mille.webp`（2172×724）。組み込み画像生成ツールで作成したイメージ写真をWebPへ変換。実在の商品の撮影記録ではない。
+- 最終生成プロンプト:
+
+```text
+Create a NEW photorealistic 3:1 horizontal banner photograph for a Japanese precious metals resale website. It is an understated real product still life, NOT a glossy advertisement or 3D rendering.
+Composition: left 55 percent of frame is empty plain warm beige matte fabric, one or two broad gentle folds, no patterns. The right 45 percent contains a modest, sparse still life of TWO small real gold bullion bars, two gold coins, a loose gold curb necklace, one delicate gold ring with a small solitaire diamond and a small diamond pendant. All objects fit in the right half; the two bars are parallel and separately resting on dark charcoal velvet in the upper right, with a visible strip of cloth separating them. Do not stack the bars. Coins lie separately flat in the foreground. Jewelry is loosely arranged with large natural gaps.
+The bars are physically realistic small minted bullion bars, thin rectangular plates about 50mm by 30mm by 5mm, softly beveled corners. Smooth brushed yellow gold with a few extremely faint hairline scratches, broad rectangular softbox reflections, dark reflected areas on their sides. Each has ONLY a discreet exact stamped marking "FINE GOLD" on one line, "999.9" underneath and "100 g" underneath. Fine regular restrained engraving, no logos, no repeated marks. Not thick bricks. The coins are smaller in diameter than the length of the bars, with one simple classical profile in shallow embossed relief, realistically thin rims, fine reeded edges, no visible letters. They must not look like chocolate coins.
+Photograph using a full frame still-life camera, 85mm lens, f/5.6, naturally focused on foreground ring and coins, the bars at the back are slightly softer. Soft neutral daylight from a large window on the upper left with a small white reflector. Natural neutral white balance, realistic pale warm yellow gold; restrained saturation, moderate contrast, gentle falloff, normal shadow detail. No drama. Velvet is a fine simple textile, slightly compressed under objects, not strongly sculpted waves. The beige backdrop is almost matte and entirely plain. Use optically plausible depth and reflections. Diamond facets show small muted white and gray reflections without sparkling star effects.
+Real professional auction-catalog product photography with subtle physical imperfections and ordinary lens rendering. No CG, no illustration, no HDR, no cinematic grading, no oversharpened outlines, no high-gloss plastic, no hammered or crackled metal, no swirling microtextures, no overly rich orange gold. No graphic elements, no overlay text, no watermark. A complete photograph at 2172x724 or closest 3:1 aspect ratio.
+```
+
+- 既存のWebP形式・HTML指定寸法・配信ファイル一致のテストを継続。実寸2172×724と、金塊・金貨・ジュエリーの配置を変換画像とブラウザーで確認した。
+- `npm run format` / `npm run lint` / `npm run format:check` / `npm test` 成功。型検査エラー・警告なし、26ページ、24テスト、4種類のbase pathを検証。lintの既存情報レベル指摘1件は変更対象外。
