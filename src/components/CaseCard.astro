@@ -7,11 +7,16 @@ const { item } = Astro.props as { item: Case };
 <article
   class="overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm"
 >
-  <div
-    class="grid h-44 place-items-center bg-gradient-to-br from-gold-50 to-stone-100 text-6xl"
-    aria-hidden="true"
-  >
-    {item.image}
+  <div class="h-44 bg-white">
+    <img
+      src={link(item.image)}
+      alt={item.imageAlt}
+      width={item.imageWidth}
+      height={item.imageHeight}
+      loading="lazy"
+      decoding="async"
+      class="h-full w-full object-contain"
+    >
   </div>
   <div class="p-5">
     <div class="flex items-center justify-between text-xs">
