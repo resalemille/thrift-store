@@ -289,7 +289,10 @@ const conditions = [
           >
             <strong>{store.name}</strong>
             <span class="mt-2 block text-sm text-ink-100">
-              {store.area} / {store.access}
+              {store.area} /{' '}
+              {store.access.map((route) => (
+                <span class="mt-1 block">{route}</span>
+              ))}
             </span>
           </a>
         ))}

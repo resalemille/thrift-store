@@ -22,7 +22,7 @@ test('主要な静的ページを生成する', () => {
   for (const path of [
     'index.html',
     'stores/index.html',
-    'stores/kanda/index.html',
+    'stores/ginza/index.html',
     'cases/index.html',
     'cases/hermes-birkin/index.html',
     'items/index.html',
@@ -212,11 +212,91 @@ test('店舗・出張買取の完全予約制を案内し、予約不要の表�
   assert.match(page('index.html'), /完全予約制で待ち時間なし/);
   assert.match(page('index.html'), /店舗・出張買取は事前にご予約ください/);
   assert.match(page('faq/index.html'), /出張買取ともに完全予約制です/);
-  assert.match(page('stores/kanda/index.html'), /完全予約制/);
+  assert.match(page('stores/ginza/index.html'), /完全予約制/);
   for (const file of htmlFiles(dist.pathname)) {
     assert.doesNotMatch(
       readFileSync(file, 'utf8'),
       /予約不要|予約なしでもOK|ご予約なしでご利用いただけます|お気軽にお立ち寄りください/,
     );
   }
+});
+
+test('確定した3店舗の情報・写真と新URLを表示する', () => {
+  const stores = [
+    [
+      'ginza',
+      '銀座店',
+      '〒104-0061 東京都中央区銀座3-4-1 大倉別館5Ｆ',
+      ['「銀座駅」 徒歩4分', '「有楽町駅」 徒歩5分'],
+    ],
+    [
+      'hiratsuka',
+      '平塚店',
+      '〒254-0034 神奈川県平塚市宝町３番１号 平塚ＭＮビル（商業棟）2F',
+      ['JR平塚駅 徒歩1分'],
+    ],
+    [
+      'yokohama',
+      '横浜店',
+      '〒220-0011 神奈川県横浜市西区高島2-19-12 横浜スカイビル20F',
+      ['「横浜」駅東口 直結', '「新高島」駅2番出口 徒歩6分'],
+    ],
+  ];
+  const home = page('index.html');
+  const list = page('stores/index.html');
+  for (const [slug, name, address, routes] of stores) {
+    const detail = page(`stores/${slug}/index.html`);
+    for (const html of [home, list]) {
+      assert.ok(html.includes(name));
+      assert.ok(html.includes(`href="/stores/${slug}/"`));
+    }
+    for (const html of [list, detail]) {
+      assert.ok(html.includes(address));
+      assert.ok(html.includes('0463-64-2885'));
+      assert.ok(html.includes('10:00〜22:00（年中無休）'));
+    }
+    for (const route of routes) {
+      assert.ok(home.includes(route), route);
+      assert.ok(detail.includes(route), route);
+    }
+    assert.ok(
+      detail.includes(
+        `src="/images/store-${slug}.${slug === 'hiratsuka' ? 'png' : 'jpg'}"`,
+      ),
+    );
+    assert.ok(
+      existsSync(
+        new URL(
+          `../dist/images/store-${slug}.${slug === 'hiratsuka' ? 'png' : 'jpg'}`,
+          import.meta.url,
+        ),
+      ),
+    );
+    assert.match(detail, /完全予約制/);
+    assert.doesNotMatch(
+      detail,
+      /女性査定員在籍|近隣駐車場あり|商店街すぐ|遺品整理相談|駅から徒歩3分/,
+    );
+  }
+  for (const slug of ['kanda', 'kichijoji']) {
+    assert.equal(
+      existsSync(new URL(`../dist/stores/${slug}/index.html`, import.meta.url)),
+      false,
+    );
+  }
+  for (const file of htmlFiles(dist.pathname)) {
+    const html = readFileSync(file, 'utf8');
+    assert.doesNotMatch(html, /href="[^"]*\/stores\/(kanda|kichijoji)\//);
+    assert.doesNotMatch(
+      html,
+      /0120-000-000|03-0000-0001|0422-00-0002|045-000-0003/,
+    );
+    assert.match(html, /href="tel:0463642885"/);
+    assert.match(html, /店舗情報以外には仮の情報が含まれます/);
+    assert.doesNotMatch(
+      html.match(/<footer[\s\S]*?<\/footer>/)?.[0] ?? '',
+      /掲載内容はすべてダミーです/,
+    );
+  }
+  assert.doesNotMatch(list, /掲載情報はすべてダミーです/);
 });
