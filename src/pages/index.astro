@@ -107,7 +107,10 @@ const conditions = [
     </div>
     <ul class="service-promises">
       <li>査定・相談無料 <span>費用は一切かかりません</span></li>
-      <li>予約なしでもOK <span>お気軽にお立ち寄りください</span></li>
+      <li>
+        完全予約制で待ち時間なし
+        <span>店舗・出張買取は事前にご予約ください</span>
+      </li>
       <li>その場で現金化 <span>ご納得後、すぐにお支払い</span></li>
     </ul>
   </section>
@@ -238,7 +241,7 @@ const conditions = [
           <div>
             <h3 class="font-bold text-ink-950">ご来店・お問い合わせ</h3>
             <p class="mt-2 text-sm leading-6 text-stone-600">
-              お近くの店舗へ。出張のご相談も承ります。
+              店舗・出張買取ともに完全予約制です。まずはご予約・お問い合わせください。
             </p>
           </div>
         </li>
@@ -271,7 +274,7 @@ const conditions = [
         <SectionTitle
           eyebrow="SHOP"
           title="お近くの店舗を探す"
-          lead="お買い物のついでにも、どうぞお気軽にお立ち寄りください。"
+          lead="店舗での査定・買取は完全予約制です。事前にご予約のうえお越しください。"
         /><a
           href={link('/stores/')}
           class="mt-8 inline-block rounded-full bg-white px-6 py-3 font-bold text-ink-900"
@@ -286,7 +289,10 @@ const conditions = [
           >
             <strong>{store.name}</strong>
             <span class="mt-2 block text-sm text-ink-100">
-              {store.area} / {store.access}
+              {store.area} /{' '}
+              {store.access.map((route) => (
+                <span class="mt-1 block">{route}</span>
+              ))}
             </span>
           </a>
         ))}
