@@ -17,10 +17,15 @@ const { item } = Astro.props;
       >← 買取実績一覧へ</a
     >
     <div class="mt-8 grid gap-10 lg:grid-cols-2">
-      <div
-        class="grid aspect-square place-items-center rounded-3xl bg-gradient-to-br from-gold-50 to-stone-100 text-9xl"
-      >
-        {item.image}
+      <div class="aspect-square overflow-hidden rounded-3xl bg-white">
+        <img
+          src={link(item.image)}
+          alt={item.imageAlt}
+          width={item.imageWidth}
+          height={item.imageHeight}
+          decoding="async"
+          class="h-full w-full object-contain"
+        >
       </div>
       <div>
         <p class="text-sm font-bold text-ink-700">{item.item} / {item.brand}</p>

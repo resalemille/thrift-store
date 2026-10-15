@@ -170,7 +170,7 @@ test('品目詳細に該当品目の買取実績と参考価格を表示する',
   const watchPage = page('items/watch/index.html');
   assert.match(brandPage, /ブランド品の買取実績/);
   assert.match(brandPage, /エルメス バーキン30をお買取りしました/);
-  assert.match(brandPage, /参考価格 ¥1,280,000/);
+  assert.match(brandPage, /参考価格 ¥3,000,000/);
   assert.match(watchPage, /腕時計の買取実績/);
   assert.match(watchPage, /ロレックス デイトジャストをお買取りしました/);
   assert.match(watchPage, /参考価格 ¥650,000/);
