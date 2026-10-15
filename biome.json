@@ -51,7 +51,10 @@
   },
   "overrides": [
     {
-      "includes": ["src/pages/consignment/index.astro"],
+      "includes": [
+        "src/pages/consignment/index.astro",
+        "src/components/ReviewsCarousel.astro"
+      ],
       "linter": {
         "rules": {
           "a11y": {

@@ -1,0 +1,325 @@
+---
+import { reviews } from '../data/reviews';
+---
+
+<section
+  class="reviews-section silk-panel"
+  aria-labelledby="reviews-title"
+  data-reviews
+>
+  <div class="reviews-heading">
+    <p class="eyebrow">CUSTOMER VOICES</p>
+    <h2 id="reviews-title" class="ornament-title">お客様の口コミ・評判</h2>
+  </div>
+  <section
+    class="reviews-track"
+    id="reviews-track"
+    aria-label="口コミ一覧"
+    tabindex="0"
+  >
+    <div class="reviews-container">
+      {reviews.map((review, index) => (
+        <article
+          class="review-card gold-frame"
+          id={`review-${index + 1}`}
+          aria-labelledby={`review-title-${index + 1}`}
+        >
+          <div class="review-heading">
+            <svg
+              class="review-person"
+              viewBox="0 0 80 80"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <circle cx="40" cy="25" r="15" />
+              <path d="M12 75v-9a28 28 0 0 1 56 0v9M26 22q14-20 28 0M34 29q6 6 12 0M24 74V62m32 12V62" />
+            </svg>
+            <h3 id={`review-title-${index + 1}`}>{review.title}</h3>
+            <p class="review-profile">
+              {review.location}
+              <br />
+              {review.age}
+            </p>
+          </div>
+          <p class="review-rating">
+            <span>評価</span>
+            <span role="img" aria-label="5点満点中5点">
+              ★★★★★
+            </span>
+          </p>
+          <p class="review-body">{review.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+  <div class="reviews-controls" hidden>
+    <button
+      type="button"
+      class="review-arrow"
+      data-previous
+      aria-label="前の口コミ"
+      aria-controls="reviews-track"
+    >
+      ←
+    </button>
+    <fieldset class="review-dots" aria-label="表示する口コミを選択">
+      {reviews.map((_, index) => (
+        <button
+          type="button"
+          class="review-dot"
+          data-review-index={index}
+          aria-label={`${index + 1}件目の口コミを表示`}
+          aria-controls="reviews-track"
+          aria-current={index === 0 ? 'true' : undefined}
+        >
+          <span></span>
+        </button>
+      ))}
+    </fieldset>
+    <button
+      type="button"
+      class="review-arrow"
+      data-next
+      aria-label="次の口コミ"
+      aria-controls="reviews-track"
+    >
+      →
+    </button>
+  </div>
+  <p
+    class="sr-only"
+    aria-live="polite"
+    aria-atomic="true"
+    data-review-status
+  ></p>
+</section>
+
+<script>
+import EmblaCarousel from 'embla-carousel';
+
+for (const section of document.querySelectorAll<HTMLElement>(
+  '[data-reviews]',
+)) {
+  const track = section.querySelector<HTMLElement>('.reviews-track');
+  const controls = section.querySelector<HTMLElement>('.reviews-controls');
+  const previous = section.querySelector<HTMLButtonElement>('[data-previous]');
+  const next = section.querySelector<HTMLButtonElement>('[data-next]');
+  const dots = Array.from(
+    section.querySelectorAll<HTMLButtonElement>('[data-review-index]'),
+  );
+  const status = section.querySelector<HTMLElement>('[data-review-status]');
+  if (!track || !controls || !previous || !next || !status) continue;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  track.classList.add('is-enhanced');
+  const carousel = EmblaCarousel(track, { loop: true, align: 'center' });
+  const update = () => {
+    const active = carousel.selectedScrollSnap();
+    dots.forEach((dot, index) => {
+      if (index === active) dot.setAttribute('aria-current', 'true');
+      else dot.removeAttribute('aria-current');
+    });
+    status.textContent = `${dots.length}件中${active + 1}件目の口コミ`;
+  };
+  previous.addEventListener('click', () =>
+    carousel.scrollPrev(reducedMotion.matches),
+  );
+  next.addEventListener('click', () =>
+    carousel.scrollNext(reducedMotion.matches),
+  );
+  dots.forEach((dot, index) => {
+    dot.addEventListener('click', () =>
+      carousel.scrollTo(index, reducedMotion.matches),
+    );
+  });
+  track.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+      event.preventDefault();
+      if (event.key === 'ArrowRight')
+        carousel.scrollNext(reducedMotion.matches);
+      else carousel.scrollPrev(reducedMotion.matches);
+    }
+  });
+  carousel.on('select', update).on('reInit', update);
+  controls.hidden = false;
+  update();
+}
+</script>
+
+<style>
+.reviews-section {
+  padding: 64px 0 48px;
+  border-block: 1px solid #d8cfbb;
+}
+.reviews-heading {
+  padding: 0 20px;
+  text-align: center;
+}
+.reviews-heading .eyebrow {
+  color: #715c31;
+  margin-bottom: 12px;
+}
+.reviews-track {
+  --card-width: min(700px, 76%);
+  max-width: 1440px;
+  margin-inline: auto;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  padding-block: 34px 24px;
+}
+.reviews-track.is-enhanced {
+  overflow: hidden;
+}
+.reviews-container {
+  display: flex;
+  align-items: stretch;
+}
+.reviews-track.is-enhanced .reviews-container {
+  touch-action: pan-y pinch-zoom;
+  user-select: none;
+}
+.review-card {
+  flex: 0 0 var(--card-width);
+  min-width: 0;
+  margin-right: 32px;
+  padding: 28px 36px 32px;
+}
+.review-heading {
+  display: grid;
+  grid-template-columns: 72px 1fr auto;
+  align-items: center;
+  gap: 20px;
+}
+.review-person {
+  width: 72px;
+  height: 72px;
+  color: #806934;
+}
+.review-heading h3 {
+  font-family: var(--font-serif);
+  font-size: 23px;
+  font-weight: 700;
+  line-height: 1.7;
+}
+.review-profile {
+  display: grid;
+  align-content: center;
+  width: 86px;
+  height: 86px;
+  border: 1px solid #ae9865;
+  outline: 1px solid #d8cfbb;
+  outline-offset: 4px;
+  border-radius: 50%;
+  background: #302e29;
+  color: #efe7d2;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.8;
+}
+.review-rating {
+  margin-top: 22px;
+  padding: 7px 0;
+  border-block: 1px dotted #ae9865;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+.review-rating span:first-child {
+  font-size: 12px;
+  font-weight: 700;
+}
+.review-rating span:last-child {
+  color: #806934;
+  font-size: 27px;
+  letter-spacing: 0.08em;
+}
+.review-body {
+  margin-top: 22px;
+  font-size: 15px;
+  line-height: 2.1;
+  overflow-wrap: anywhere;
+}
+.reviews-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  margin-top: 14px;
+}
+.reviews-controls[hidden] {
+  display: none;
+}
+.review-arrow {
+  width: 44px;
+  height: 44px;
+  border: 1px solid #ae9865;
+  color: #594a30;
+  cursor: pointer;
+}
+.review-arrow:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+.review-arrow:not(:disabled):hover {
+  background: #efe7d2;
+}
+.review-dots {
+  display: flex;
+}
+.review-dot {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+}
+.review-dot span {
+  width: 12px;
+  height: 12px;
+  border: 1px solid #806934;
+  border-radius: 50%;
+}
+.review-dot[aria-current] span {
+  background: #806934;
+}
+@media (max-width: 760px) {
+  .reviews-section {
+    padding-block: 40px 32px;
+  }
+  .reviews-track {
+    --card-width: 86%;
+    padding-block: 28px 20px;
+  }
+  .review-card {
+    margin-right: 16px;
+    padding: 20px 20px 24px;
+  }
+  .review-heading {
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+  }
+  .review-person {
+    display: none;
+  }
+  .review-heading h3 {
+    font-size: 19px;
+  }
+  .review-profile {
+    width: 66px;
+    height: 66px;
+    font-size: 10px;
+  }
+  .review-body {
+    font-size: 14px;
+    line-height: 2;
+  }
+  .reviews-controls {
+    gap: 8px;
+  }
+  .review-dot {
+    width: 40px;
+  }
+}
+</style>
