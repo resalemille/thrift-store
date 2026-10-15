@@ -1,4 +1,39 @@
 ---
-import Layout from '../../layouts/Layout.astro'; import PageHero from '../../components/PageHero.astro';
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
 ---
-<Layout title="プライバシーポリシー"><PageHero title="プライバシーポリシー" eyebrow="PRIVACY POLICY" /><article class="mx-auto max-w-4xl px-5 py-16"><p class="leading-8 text-stone-600">買取のResale Mille（リセールミル）（以下「当社」）は、お客様の個人情報を適切に取り扱います。本ページはダミー文面であり、公開前に事業内容と運用にあわせて内容を確定してください。</p><div class="mt-10 grid gap-8">{[['1. 個人情報の取得', '当社は、お問い合わせやサービスの提供に必要な範囲で、適正な方法により個人情報を取得します。'], ['2. 利用目的', '取得した情報は、お問い合わせへの対応、サービスの提供、必要なご連絡のために利用します。'], ['3. 第三者提供', '法令に基づく場合を除き、ご本人の同意なく第三者へ提供することはありません。'], ['4. お問い合わせ窓口', '個人情報の取り扱いに関するお問い合わせは、公開前に確定する窓口までご連絡ください。']].map(([title, body]) => <section><h2 class="text-xl font-bold text-ink-950">{title}</h2><p class="mt-3 leading-8 text-stone-600">{body}</p></section>)}</div></article></Layout>
+
+<Layout title="プライバシーポリシー"
+  ><PageHero title="プライバシーポリシー" eyebrow="PRIVACY POLICY" />
+  <article class="mx-auto max-w-4xl px-5 py-16">
+    <p class="leading-8 text-stone-600">
+      買取のResale
+      Mille（リセールミル）（以下「当社」）は、お客様の個人情報を適切に取り扱います。本ページはダミー文面であり、公開前に事業内容と運用にあわせて内容を確定してください。
+    </p>
+    <div class="mt-10 grid gap-8">
+      {[
+        [
+          '1. 個人情報の取得',
+          '当社は、お問い合わせやサービスの提供に必要な範囲で、適正な方法により個人情報を取得します。',
+        ],
+        [
+          '2. 利用目的',
+          '取得した情報は、お問い合わせへの対応、サービスの提供、必要なご連絡のために利用します。',
+        ],
+        [
+          '3. 第三者提供',
+          '法令に基づく場合を除き、ご本人の同意なく第三者へ提供することはありません。',
+        ],
+        [
+          '4. お問い合わせ窓口',
+          '個人情報の取り扱いに関するお問い合わせは、公開前に確定する窓口までご連絡ください。',
+        ],
+      ].map(([title, body]) => (
+        <section>
+          <h2 class="text-xl font-bold text-ink-950">{title}</h2>
+          <p class="mt-3 leading-8 text-stone-600">{body}</p>
+        </section>
+      ))}
+    </div>
+  </article></Layout
+>

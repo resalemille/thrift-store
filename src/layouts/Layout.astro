@@ -6,37 +6,42 @@ import { site } from '../data/site';
 import { link } from '../lib/paths';
 
 interface Props {
-	title?: string;
-	description?: string;
+  title?: string;
+  description?: string;
 }
 
-const { title, description = '買取のResale Mille（リセールミル）は、ブランド品・時計・貴金属などを丁寧に査定する買取専門店です。' } = Astro.props;
-const pageTitle = title ? `${title} | ${site.name}` : `${site.catch} | ${site.name}`;
+const {
+  title,
+  description = '買取のResale Mille（リセールミル）は、ブランド品・時計・貴金属などを丁寧に査定する買取専門店です。',
+} = Astro.props;
+const pageTitle = title
+  ? `${title} | ${site.name}`
+  : `${site.catch} | ${site.name}`;
 ---
 
 <!doctype html>
-	<html lang="ja">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href={link('/favicon.svg')} />
-		<link rel="icon" href={link('/favicon.ico')} />
-		<meta name="description" content={description} />
-		<meta name="generator" content={Astro.generator} />
-		<title>{pageTitle}</title>
-	</head>
-	<body>
-		<Header />
-		<main><slot /></main>
-		<Footer />
-	</body>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="icon" type="image/svg+xml" href={link('/favicon.svg')}>
+    <link rel="icon" href={link('/favicon.ico')}>
+    <meta name="description" content={description}>
+    <meta name="generator" content={Astro.generator}>
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <Header />
+    <main><slot /></main>
+    <Footer />
+  </body>
 </html>
 
 <style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		min-height: 100%;
-	}
+html,
+body {
+  margin: 0;
+  width: 100%;
+  min-height: 100%;
+}
 </style>

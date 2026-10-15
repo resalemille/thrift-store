@@ -1,5 +1,20 @@
 ---
-interface Props { title: string; lead?: string; eyebrow?: string }
+interface Props {
+  title: string;
+  lead?: string;
+  eyebrow?: string;
+}
 const { title, lead, eyebrow = 'RESALE MILLE' } = Astro.props;
 ---
-<section class="page-hero silk-panel"><div class="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-20"><p class="text-xs font-bold tracking-[0.22em] text-ink-700">{eyebrow}</p><h1 class="font-serif mt-4 text-3xl font-bold tracking-tight text-ink-950 lg:text-5xl">{title}</h1>{lead && <p class="mt-5 max-w-2xl leading-8 text-stone-600">{lead}</p>}</div></section>
+
+<section class="page-hero silk-panel">
+  <div class="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-20">
+    <p class="text-xs font-bold tracking-[0.22em] text-ink-700">{eyebrow}</p>
+    <h1
+      class="font-serif mt-4 text-3xl font-bold tracking-tight text-ink-950 lg:text-5xl"
+    >
+      {title}
+    </h1>
+    {lead && <p class="mt-5 max-w-2xl leading-8 text-stone-600">{lead}</p>}
+  </div>
+</section>
