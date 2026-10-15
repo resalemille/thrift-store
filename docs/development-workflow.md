@@ -48,3 +48,21 @@ GitHub PagesのSourceは **GitHub Actions** のまま使用する。現在は独
 `npm test` は既存のページ検証に加え、キャッシュの複数PR共存・更新・本番更新・削除を検証する。さらに `/`、`/sample`、`/sample/pr-preview/pr-123`、`/pr-preview/pr-123` でビルドし、全HTMLの内部リンク・画像・favicon・CSS・JavaScriptが指定base配下にあり、参照先が存在することを確認する。現サイトにはクライアントJavaScriptがないため、テスト中だけ一時ページを作り、Astroが生成する外部JavaScriptのURLも検証してから削除する。
 
 導入PRのマージ後、異なる内容のテストPRを2件開く。両方のBotコメントとトップ・下層ページ、画像、favicon、CSS、JavaScriptの読み込みをブラウザで確認する。一方を更新してコメントが増えないこと、一方を閉じて対象だけが消えること、mainの公開後も残ったプレビューが表示されることを確認する。導入前のmainには新ワークフローがないため、クローズ・main公開を含む一連の確認は導入PRのマージ後に実施する。
+
+
+## Biomeによるローカル検証（Issue #8）
+
+依存関係は `npm ci` でインストールする。PR前には次の順に確認する。
+
+1. `npm run format`: 対象ファイルを整形する（書き換えあり）。
+2. `npm run lint`: 推奨ルールによる静的解析。警告も失敗として扱う。
+3. `npm run format:check`: 整形漏れの検出（書き換えなし）。
+4. `npm test`: Astroの型・テンプレート検証、静的ビルド、ページ・公開パスの検証。
+
+`npm run check` と `npm run build` は個別にも実行できる。Biomeは `astro check` の代替ではない。GitHub ActionsへのBiome追加は別Issueの対象とする。
+
+対象は `biome.json` の `files.includes` で管理する。`src/` のAstro・TypeScript・JavaScript・CSS・JSON、`scripts/`、`tests/`、ルートのJSON・MJS設定、および `docs/` の対応形式を検査する。Gitの除外設定も利用し、依存関係・生成物（`node_modules/`、`dist/`、`.astro/`）、自動生成の `package-lock.json`、画像は除外する。
+
+固定バージョンのBiome 2.5.15ではMarkdown・YAMLは非対応のため、`docs/*.md`、README、AGENTS、Actions YAMLは整形・lintされない。ドキュメントの文章・リンク・コード例はレビューで確認する。対応範囲は[Biome公式の言語対応表](https://biomejs.dev/introduction/language-support/)を参照する。
+
+Astroは実験的なHTML全体の解析・整形を有効化している。更新時は差分と `astro check`・ビルド結果を確認する。CSSではTailwind構文を有効化し、別コンポーネント間のセレクターも比較してしまう `noDescendingSpecificity` のみ無効化する。委託販売ページの比較表はキーボードで横スクロールできるようにするため、そのページだけ `noNoninteractiveTabindex` を無効化している。

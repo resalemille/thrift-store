@@ -11,7 +11,10 @@
     "check": "astro check",
     "test": "npm run check && npm run build && node --test tests/*.test.mjs && node scripts/test-base-paths.mjs",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "lint": "biome lint . --error-on-warnings",
+    "format:check": "biome format .",
+    "format": "biome format --write ."
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
@@ -23,6 +26,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "@biomejs/biome": "2.5.15",
     "@types/node": "^22.20.3",
     "typescript": "^6.0.3"
   }

@@ -1,4 +1,27 @@
 ---
-import Layout from '../../layouts/Layout.astro'; import PageHero from '../../components/PageHero.astro'; import { faqs } from '../../data/site';
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
+import { faqs } from '../../data/site';
 ---
-<Layout title="よくある質問"><PageHero title="よくある質問" lead="査定や買取について、よくいただくご質問にお答えします。" eyebrow="FAQ" /><section class="mx-auto max-w-4xl px-5 py-16">{faqs.map(([question, answer], index) => <details class="group border-b border-stone-200 py-6" open={index === 0}><summary class="flex cursor-pointer list-none gap-4 font-bold text-ink-950"><span class="text-ink-700">Q</span>{question}</summary><p class="ml-8 mt-5 leading-8 text-stone-600"><span class="mr-3 font-bold text-gold-600">A</span>{answer}</p></details>)}</section></Layout>
+
+<Layout title="よくある質問"
+  ><PageHero
+    title="よくある質問"
+    lead="査定や買取について、よくいただくご質問にお答えします。"
+    eyebrow="FAQ"
+  />
+  <section class="mx-auto max-w-4xl px-5 py-16">
+    {faqs.map(([question, answer], index) => (
+      <details class="group border-b border-stone-200 py-6" open={index === 0}>
+        <summary class="flex cursor-pointer list-none gap-4 font-bold text-ink-950">
+          <span class="text-ink-700">Q</span>
+          {question}
+        </summary>
+        <p class="ml-8 mt-5 leading-8 text-stone-600">
+          <span class="mr-3 font-bold text-gold-600">A</span>
+          {answer}
+        </p>
+      </details>
+    ))}
+  </section></Layout
+>

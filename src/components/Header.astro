@@ -1,20 +1,53 @@
 ---
 import { link } from '../lib/paths';
 import { site } from '../data/site';
-const navigation = [['/', 'TOP'], ['/items/', '買取品目'], ['/brands/', '買取強化ブランド'], ['/cases/', '買取実績'], ['/consignment/', '委託販売'], ['/faq/', 'よくある質問'], ['/stores/', '店舗案内'], ['/contact/', 'お問い合わせ']];
+const navigation = [
+  ['/', 'TOP'],
+  ['/items/', '買取品目'],
+  ['/brands/', '買取強化ブランド'],
+  ['/cases/', '買取実績'],
+  ['/consignment/', '委託販売'],
+  ['/faq/', 'よくある質問'],
+  ['/stores/', '店舗案内'],
+  ['/contact/', 'お問い合わせ'],
+];
 ---
+
 <header class="site-header">
   <div class="header-inner">
     <a href={link('/')} class="brand-lockup" aria-label={`${site.name} トップ`}>
-      <svg viewBox="0 0 48 48" class="brand-mark" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M24 36C9 10 9 2 12 6s26 35 27 25C42 9 28 5 24 25S8 48 7 31C5 17 20 10 24 25S40 48 41 31C43 17 28 10 24 36Z" /></svg>
-      <span><span class="brand-kicker">買取の</span><strong>Resale Mille</strong><span class="brand-reading">リセールミル</span></span>
+      <svg
+        viewBox="0 0 48 48"
+        class="brand-mark"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        aria-hidden="true"
+      >
+        <path
+          d="M24 36C9 10 9 2 12 6s26 35 27 25C42 9 28 5 24 25S8 48 7 31C5 17 20 10 24 25S40 48 41 31C43 17 28 10 24 36Z"
+        />
+      </svg>
+      <span
+        ><span class="brand-kicker">買取の</span><strong>Resale Mille</strong
+        ><span class="brand-reading">リセールミル</span></span
+      >
     </a>
     <nav class="desktop-nav" aria-label="メインナビゲーション">
-      {navigation.map(([href, label]) => <a href={link(href)} aria-current={Astro.url.pathname === link(href) ? 'page' : undefined}>{label}</a>)}
+      {navigation.map(([href, label]) => (
+        <a
+          href={link(href)}
+          aria-current={Astro.url.pathname === link(href) ? 'page' : undefined}
+        >
+          {label}
+        </a>
+      ))}
     </nav>
     <details class="mobile-menu">
       <summary>メニュー</summary>
-      <nav aria-label="モバイルナビゲーション">{navigation.map(([href, label]) => <a href={link(href)}>{label}</a>)}</nav>
+      <nav aria-label="モバイルナビゲーション">
+        {navigation.map(([href, label]) => <a href={link(href)}>{label}</a>)}
+      </nav>
     </details>
   </div>
 </header>
