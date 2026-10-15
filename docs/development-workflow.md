@@ -48,3 +48,11 @@ GitHub PagesのSourceは **GitHub Actions** のまま使用する。現在は独
 `npm test` は既存のページ検証に加え、キャッシュの複数PR共存・更新・本番更新・削除を検証する。さらに `/`、`/sample`、`/sample/pr-preview/pr-123`、`/pr-preview/pr-123` でビルドし、全HTMLの内部リンク・画像・favicon・CSS・JavaScriptが指定base配下にあり、参照先が存在することを確認する。現サイトにはクライアントJavaScriptがないため、テスト中だけ一時ページを作り、Astroが生成する外部JavaScriptのURLも検証してから削除する。
 
 導入PRのマージ後、異なる内容のテストPRを2件開く。両方のBotコメントとトップ・下層ページ、画像、favicon、CSS、JavaScriptの読み込みをブラウザで確認する。一方を更新してコメントが増えないこと、一方を閉じて対象だけが消えること、mainの公開後も残ったプレビューが表示されることを確認する。導入前のmainには新ワークフローがないため、クローズ・main公開を含む一連の確認は導入PRのマージ後に実施する。
+
+## フロントエンドCI（Issue #7）
+
+main向けPR（フォークを含む）、mainへのpush、手動実行で `Frontend tests` チェックを確認する。Node.js 22で `npm ci`、`npm test` の順に実行し、Astro/TypeScriptチェック、静的ビルド、Nodeテスト、公開パス検証をすべて行う。
+
+テスト成功後にのみ公開用ビルドとPagesデプロイを実行する。失敗時はActionsの `Frontend tests` ログを確認し、修正をpushして成功を確認する。フォークPRはテストのみで公開しない。PRクローズ時はテストを省略し、既存のプレビュー削除を実行する。
+
+マージ前にPRのChecksで `Frontend tests` の成功を確認する。必須チェックによるマージ制限はワークフローとは別設定であり、管理者がSettings → Rules → Rulesets（またはBranchesの保護ルール）でmainを対象に `Frontend tests` を必須ステータスチェックへ追加する。権限がない場合は管理者へ依頼する。
