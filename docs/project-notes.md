@@ -14,7 +14,7 @@
 
 ## 実装方針
 
-- 本番情報が未確定のため、社名・文章・店舗・実績・画像はすべて差し替え前提のダミーとする。
+- 店名は「買取のResale Mille（リセールミル）」とする。運営会社情報・店舗・実績など未確定の情報は差し替え前提のダミーとする。
 - 動的な一覧／詳細ページは、microCMS導入前は `src/data/` の仮データを使用する。
 - GitHub Pages は静的ホスティングのため、公開時は microCMS の読み取り専用キーを GitHub Actions の環境変数に設定してビルドする。
 - FormspreeのフォームIDが未発行の間、問い合わせフォームは送信先未設定の案内を表示する。
@@ -45,7 +45,7 @@
 
 ## 確定待ちの情報
 
-- サイト名／ロゴ／ブランドカラー
+- 正式ロゴデータ（店名・ブランド配色はIssue #16で反映済み）
 - 運営会社情報、古物商許可番号
 - 電話番号、営業時間、店舗情報、対応地域
 - 買取対象・買取方法・実績
@@ -77,3 +77,29 @@
 - 状態不問の買取相談セクションの見出しを、デスクトップでは一行で表示するよう修正。モバイルでは可読性を保つため自然に改行する。
 - ファーストビュー下部に、店舗一覧とお問い合わせへ遷移する大きな二分割CTAを追加。デスクトップでは横並び、モバイルでは縦並びで表示する。
 - カスタムドメインへの切り替えに合わせて、Astroの `site` を `https://thrift-store.resalemille.online` に更新し、リポジトリ名を含む `base` を削除。CSS、リンク、公開アセットをカスタムドメインのルートから読み込むよう変更し、`public/CNAME` でドメイン設定を保持する。
+
+### 2026-10-15 — Issue #16
+
+- 店名を「買取のResale Mille（リセールミル）」に統一。全ページのタイトル・メタ説明・ヘッダー・フッター・会社概要・プライバシーポリシーから旧店名を置換した。法人格は未確認のため追加していない。
+- 参考画像に合わせ、チャコール（`#282725`）・アイボリー（`#f8f6f0`）・アンティークゴールド（`#ae9865`）を基調に共通配色と枠・見出し・メニューを変更。`ink` / `gold` のTailwindトークンは `src/styles/global.css` で定義する。
+- トップに参考画像のコピーと「高価買取の実績」「幅広い買取対象」「安心・誠実な対応」の3カードを実装。Web査定・店舗検索・出張予約を並べ、モバイルは縦並びにする。
+- 店舗検索は `/stores/`、Web査定・出張予約は `/contact/` へ `link()` 経由で遷移する。同じ公開先のパスを使い、本番とPRプレビューの両方を維持する。
+- 金買取はゴールドの写真バナー、状態別案内は個別の写真入り金枠カードに変更。既存の4項目・説明文・査定可否注記・既存リンクを保持した。暗い店舗案内は見出しと説明文の明度を調整する。
+- 新しい生成写真は `public/images/hero-resale-mille.webp`、`gold-resale-mille.webp`、`condition-resale-mille.webp`。文字・ボタンはHTMLで実装し、画像に埋め込まない。正式ロゴは未支給のため文字ロゴと仮の線画マークを使用する。
+- `tests/site.test.mjs` で全ページの店名、3つのCTAのリンク、選ばれる理由、状態別の4項目と説明文、写真アセット、配色を検証する。`npm test` は既存の内部リンク・PRプレビューのbase検証も継続する。
+
+#### 写真の生成記録
+
+組み込みの画像生成ツールを使用し、次のプロンプトで作成。元の生成画像を残してWebPへ形式変換した。
+
+- `hero`: Use case: photorealistic-natural. Create a wide landscape website hero photograph, 3:1 composition, for a premium Japanese resale appraiser. Reference style is a dark charcoal paneled antique boutique: antique walnut sideboard and warm table lamp at far left, small vase and framed art, open watch presentation boxes and silver luxury watches at lower left. At lower right a black quilted handbag without visible logos, a gold watch, loose gemstones, and a tall pale celadon ceramic antique vase. Dark charcoal empty center and upper middle reserved for large white webpage headings (do NOT draw any text). Moody soft warm lighting, realistic material texture, restrained expensive atmosphere, charcoal, walnut, antique gold, ivory. No people, no text, no typography, no buttons, no watermarks. The objects fill the outer left and outer right edges; the middle 55% remains dark uncluttered negative space. Full bleed photo, no frame.
+
+- `gold`: Use case: product-mockup. Wide landscape 3:1 full bleed website campaign photograph for a premium Japanese gold resale store. Three realistic gold ingots, gold coins, delicate gold necklaces and diamond jewelry laid on charcoal black velvet, all composed entirely in the RIGHT HALF of the image. LEFT HALF is simple softly lit muted antique gold / champagne satin backdrop with generous clean negative space for webpage headings (do NOT draw any text). Luxurious quiet studio product photography, warm highlights, photorealistic textures, elegant diagonal transition from gold backdrop on left to black velvet on right. No text, no typography, no watermark, no buttons, no logos.
+
+- `condition`: Use case: product-mockup. Create a wide 3:1 photograph strip for a premium Japanese secondhand appraiser website. FOUR equally wide vertical still life compositions seamlessly arranged side by side, each occupies exactly one quarter of the image, same dark warm charcoal tabletop background and moody soft lighting throughout. First quarter: a broken fine gold chain necklace and single pearl earring. Second quarter: a worn brown designer style handbag with scuffed leather edges, no logos. Third quarter: a stopped silver wristwatch beside an old silver-and-black film camera. Fourth quarter: an old amber liquor bottle without label and a small open empty watch presentation box. Each group fully fits its quarter with some margin, all objects clearly visible. Realistic editorial studio photography, muted gold, brown and silver, premium quiet atmosphere. No text, no labels, no watermarks, no frames, no typography.
+
+#### 検証結果
+
+- `npm test`: 型検査でエラー・警告なし、25ページ生成、14テスト成功。4種類のbase pathで全生成リンク・アセットの参照先を確認。
+- Chromeで320px・390px・768px・1680px幅を確認し、トップページに横スクロールが発生しないことを確認。390px幅でメニューの開閉と店舗一覧への遷移を確認。
+- デスクトップでトップ・金買取・状態別カードの写真・見出し・枠を確認。モバイルのメインコピーは文節で折り返す。
