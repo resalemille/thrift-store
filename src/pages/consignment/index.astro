@@ -77,11 +77,6 @@ const comparisons = [
   description={`${site.name}の委託販売。腕時計・ブランド品・ジュエリーの売れる最高値を追求。販売額と手数料を明記し、手数料は1%から。`}
 >
   <div class="consignment">
-    <nav class="breadcrumb" aria-label="パンくずリスト">
-      <a href={link('/')}>TOP</a><span aria-hidden="true">›</span
-      ><span aria-current="page">委託販売</span>
-    </nav>
-
     <section
       class="home-hero consignment-hero"
       aria-labelledby="consignment-title"
@@ -342,15 +337,7 @@ const comparisons = [
     transparent 78%
   );
 }
-.breadcrumb {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: 10px 20px 28px;
-  font-size: 10px;
-}
+
 a {
   color: inherit;
 }
@@ -868,9 +855,6 @@ details[open] .chevron {
 @media (max-width: 680px) {
   .consignment {
     padding-bottom: 28px;
-  }
-  .breadcrumb {
-    padding-bottom: 20px;
   }
   .hero-grid {
     grid-template-columns: 1fr;
