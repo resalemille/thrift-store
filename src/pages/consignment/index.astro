@@ -1,4 +1,5 @@
 ---
+import BrandIcon from '../../components/BrandIcon.astro';
 import Layout from '../../layouts/Layout.astro';
 import ConsignmentIcon from '../../components/ConsignmentIcon.astro';
 import ConsignmentContacts from '../../components/ConsignmentContacts.astro';
@@ -8,23 +9,28 @@ import { link } from '../../lib/paths';
 
 const features = [
   {
-    title: ['お申し込みはLINEで簡単', '最短5分で査定完了'],
-    image: 'phone',
-    alt: 'スマートフォンで相談する様子',
-    text: 'LINE友だち追加後、時計の写真を撮影しトークでお送りください。ブランド名・名称・型番・付属品・使用状態などの詳しい情報をご入力いただければ、より明確な販売金額をお伝えいたします。査定結果は最短5分でお届け！お気軽にお申し込みください。',
+    icon: 'crown',
+    title: '業界唯一、売れる最高値を追求',
+    text: '国内外の販売経路と市場の動向を踏まえ、お品物が売れる最高値を目指します。',
   },
   {
-    title: ['お預かり不要で安心', '売却までご自宅で保管'],
-    image: 'storage',
-    alt: '自宅の木製ケースに保管された腕時計',
-    text: '時計のお預かりは商品撮影時のみ。その後は大切な時計をお客様のお手元で、ご成約までご自宅で保管しながら出品することが可能です。',
+    icon: 'shield',
+    title: '業界唯一、販売額も手数料も明確に',
+    text: '販売額と手数料の内訳を明記。お手取り額まで、わかりやすくご案内します。',
   },
   {
-    title: ['手数料は業界最安値2.8%〜', '高値・早期のご成約'],
-    image: 'boutique',
-    alt: '腕時計のショーケースが並ぶ落ち着いた店舗',
-    text: '手数料は業界最安値の2.8％。また、弊社が国内外に持つ広範な販売経路を活用し、時計を早期に高値で売却することが可能です。',
-    note: '※現金決済の場合',
+    icon: 'collection',
+    title: '業界最安値、手数料は1%から',
+    text: '手数料を抑え、大切なお品物の価値をお客様のお手元へ。販売条件はご相談のうえ決定します。',
+  },
+];
+const categories = [
+  { icon: 'watch', title: '腕時計', text: '高級時計から国産時計まで' },
+  { icon: 'brand', title: 'ブランド品', text: 'バッグ・財布・小物' },
+  {
+    icon: 'jewelry',
+    title: 'ジュエリー',
+    text: '指輪・ネックレス・ピアスなど',
   },
 ];
 const comparisons = [
@@ -40,13 +46,23 @@ const comparisons = [
   },
   {
     label: '手数料',
-    cells: ['※2.8%', '3%（800万以上）', '7%', '相談'],
+    cells: [
+      '1%〜',
+      '800万円以上で3%（販売価格を伝えないため実態は不明）',
+      '7%',
+      '5%＋消費税額 ※実質15%',
+    ],
     marks: ['◎', '×', '×', '×'],
   },
   {
     label: '販売価格',
-    cells: ['ご相談の上決定', '不明', '不明', '相談'],
-    marks: ['◎', '×', '×', '◎'],
+    cells: [
+      'ご相談の上決定（市場で売れる最大金額を目指す）',
+      '販売者が格安に決定',
+      '販売者が格安に決定',
+      '販売者が格安に決定',
+    ],
+    marks: ['◎', '×', '×', '×'],
   },
   {
     label: '販売方法',
@@ -57,88 +73,97 @@ const comparisons = [
 ---
 
 <Layout
-  title="委託販売・スマート委託"
-  description={`${site.name}のスマート委託。大切な時計をご自宅で保管したまま販売できる、新しい委託販売のスタイル。手数料2.8%〜。`}
+  title="委託販売"
+  description={`${site.name}の委託販売。腕時計・ブランド品・ジュエリーの売れる最高値を追求。販売額と手数料を明記し、手数料は1%から。`}
 >
   <div class="consignment">
     <nav class="breadcrumb" aria-label="パンくずリスト">
       <a href={link('/')}>TOP</a><span aria-hidden="true">›</span
-      ><span aria-current="page">スマート委託</span>
+      ><span aria-current="page">委託販売</span>
     </nav>
 
     <section class="introduction" aria-labelledby="consignment-title">
       <div class="hero-grid">
         <div class="hero-copy">
-          <h1 id="consignment-title">預かり不要のスマート委託</h1>
+          <h1 id="consignment-title">大切なお品物を、価値ある委託販売へ</h1>
           <div class="hero-tagline">
             <div class="fee-badge">
-              手数料<strong>2.8<span>%〜</span></strong>業界最安値
+              手数料<strong>1<span>%〜</span></strong>業界最安値
             </div>
-            <p>
-              大切な時計をお手元に置いたまま売る、<br>新しい委託販売のスタイル
-            </p>
+            <p>腕時計・ブランド品・ジュエリーの<br>売れる最高値を目指して</p>
           </div>
         </div>
         <img
           class="hero-image"
-          src={link('/images/consignment/hero.png')}
-          alt="緑のケースに入った腕時計を手渡す様子"
-          width="1448"
-          height="1086"
+          src={link('/images/consignment/watch-cutout.png')}
+          alt="ローズゴールドの腕時計"
+          width="1024"
+          height="1536"
           fetchpriority="high"
         >
       </div>
       <div class="introduction-copy">
+        <p>{site.name}の委託販売は、大切なお品物の売れる最高値を追求します。</p>
         <p>
-          {site.name}の「スマート委託」は、通常の委託販売と違い、<br
-            class="desktop-break"
-          >大切な時計を販売店に預けずにご自宅で保管したまま販売できる、画期的な委託販売システムです。
-        </p>
-        <p>
-          <mark>手数料は業界最安値の2.8%</mark
-          >、販売価格はご希望の手取り額と相場をもとに、ご相談の上決定いたします。
-        </p>
-        <p class="second-paragraph">
-          お申し込み・査定はお電話もしくはLINEで簡単に行えます。<br
-            class="desktop-break"
-          >また、弊社は国内外に多数の独自販売経路を持っているため、高値かつ早期の売却が期待できます。<br
-            class="desktop-break"
-          >ぜひご利用ください。
+          <mark>手数料は業界最安値の1%から</mark
+          >。販売額と手数料の内訳を明記し、ご相談のうえ販売価格を決定します。
         </p>
       </div>
-      <a class="consult-link" href="#consignment-contact">ご相談・お申し込み</a>
+      <a class="consult-link" href={link('/contact/')}>無料でWeb査定・ご相談</a>
     </section>
 
-    <section class="features dark-panel" aria-labelledby="features-title">
-      <h2 id="features-title" class="section-heading">スマート委託の特徴</h2>
+    <section class="features silk-panel" aria-labelledby="features-title">
+      <h2 id="features-title" class="ornament-title">
+        {site.shortName}の委託販売が選ばれる理由
+      </h2>
       <div class="feature-grid">
         {features.map((feature) => (
-          <article>
-            <h3>
-              {feature.title[0]}
-              <br />
-              {feature.title[1]}
-            </h3>
-            <img
-              src={link(`/images/consignment/${feature.image}.png`)}
-              alt={feature.alt}
-              width="1672"
-              height="941"
-              loading="lazy"
-            />
+          <article class="consignment-reason gold-frame">
+            <BrandIcon name={feature.icon} />
+            <h3>{feature.title}</h3>
             <p>{feature.text}</p>
-            {feature.note && <small>{feature.note}</small>}
           </article>
+        ))}
+      </div>
+    </section>
+    <section
+      class="consignment-categories silk-panel"
+      aria-labelledby="categories-title"
+    >
+      <div class="consignment-ribbon" aria-hidden="true">
+        {categories.map((category) => (
+          <span>
+            <BrandIcon name={category.icon} />
+            {category.title}
+          </span>
+        ))}
+      </div>
+      <h2 id="categories-title" class="ornament-title">
+        委託販売対象カテゴリー一覧
+      </h2>
+      <p class="section-lead">
+        腕時計・ブランド品・ジュエリーの委託販売を承ります。
+      </p>
+      <div class="consignment-category-grid">
+        {categories.map((category) => (
+          <a href={link('/contact/')} class="consignment-category">
+            <BrandIcon name={category.icon} />
+            <span>
+              <strong>{category.title}</strong>
+              <small>{category.text}</small>
+            </span>
+            <span aria-hidden="true">›</span>
+          </a>
         ))}
       </div>
     </section>
 
     <section class="comparison" aria-labelledby="comparison-title">
       <h2 id="comparison-title" class="section-heading">
-        スマート委託と他社の委託販売との比較
+        他社の委託販売との比較
       </h2>
       <p class="section-lead">
-        {site.name}のスマート委託は他社と比べて便利で安心。<br>手数料も業界最安値に設定しています。
+        {site.name}の委託販売は他社と比べて便利で安心。<br>手数料も業界最安値に設定しています。
       </p>
       <section
         class="table-scroll"
@@ -147,7 +172,7 @@ const comparisons = [
       >
         <table>
           <caption class="sr-only">
-            スマート委託と他社の委託販売の比較
+            他社の委託販売との比較
           </caption>
           <colgroup>
             <col class="label-column">
@@ -184,7 +209,6 @@ const comparisons = [
           </tbody>
         </table>
       </section>
-      <p class="table-note">※現金決済の場合</p>
     </section>
 
     <section class="flow dark-panel" aria-labelledby="flow-title">
@@ -194,9 +218,9 @@ const comparisons = [
           <span class="step-number">STEP 1</span>
           <h3>お申込み</h3>
           <div class="step-icon contact-icons">
-            <ConsignmentIcon name="line" /><ConsignmentIcon name="phone" />
+            <ConsignmentIcon name="mail" />
           </div>
-          <p>お申し込みはLINE・メール・お電話でお気軽にご相談下さい。</p>
+          <p>無料のWeb査定・ご相談フォームからお気軽にお申し込みください。</p>
           <ConsignmentContacts compact />
         </li>
         <li>
@@ -204,9 +228,8 @@ const comparisons = [
           <h3>お預かり・撮影</h3>
           <div class="step-icon"><ConsignmentIcon name="camera" /></div>
           <p>
-            郵送またはご来店にて時計をお預かりし、状態の確認と販売用の写真撮影を行います。
+            郵送にてお品物をお預かりし、状態の確認と販売用の写真撮影を行います。
           </p>
-          <p>スマート委託の場合は、撮影後3日以内にお客様へご返却いたします。</p>
         </li>
         <li>
           <span class="step-number">STEP 3</span>
@@ -216,9 +239,6 @@ const comparisons = [
             販売希望価格をうかがい、商品の状態と相場を基に手数料を決定します。
           </p>
           <p>決定後は当店のECサイト等に出品いたします。</p>
-          <p>
-            スマート委託にて現物確認のご依頼があった場合は、1週間以内に商品をご郵送ください。
-          </p>
         </li>
         <li>
           <span class="step-number">STEP 4</span>
@@ -257,7 +277,7 @@ const comparisons = [
     >
       <img
         class="contact-watch"
-        src={link('/images/consignment/watch.png')}
+        src={link('/images/consignment/watch-cutout.png')}
         alt=""
         width="1024"
         height="1536"
@@ -335,7 +355,7 @@ summary:focus-visible,
 }
 .introduction::before,
 .flow::before {
-  content: "SMART";
+  content: none;
   position: absolute;
   z-index: -1;
   left: 50%;
@@ -357,6 +377,7 @@ summary:focus-visible,
   align-items: center;
 }
 h1 {
+  text-wrap: balance;
   margin: 0 0 26px;
   font-size: clamp(24px, 3.5vw, 42px);
   line-height: 1.45;
@@ -393,8 +414,8 @@ h1 {
 .hero-image {
   width: 100%;
   height: auto;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
+  max-height: 360px;
+  object-fit: contain;
 }
 .introduction-copy {
   margin: 38px auto 30px;
@@ -453,7 +474,11 @@ mark {
   background: var(--gold);
 }
 .features {
+  color: #302a20;
   padding: 48px 8.4% 62px;
+}
+.features .ornament-title {
+  margin-bottom: 40px;
 }
 .feature-grid {
   display: grid;
@@ -468,12 +493,6 @@ mark {
   line-height: 1.5;
   font-weight: 700;
 }
-.feature-grid img {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 1.78;
-  object-fit: cover;
-}
 .feature-grid p {
   margin: 14px 0 0;
   font-size: 13px;
@@ -481,6 +500,72 @@ mark {
 }
 small {
   font-size: 10px;
+}
+.consignment-reason {
+  padding: 24px 18px;
+  text-align: center;
+  background: #fffdf8;
+}
+.consignment-reason :global(svg) {
+  width: 36px;
+  height: 36px;
+  margin: 0 auto 16px;
+  color: #a28d55;
+}
+.consignment-categories {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 0 48px;
+  color: #302a20;
+}
+.consignment-categories h2 {
+  margin-top: 40px;
+}
+.consignment-ribbon {
+  display: flex;
+  justify-content: center;
+  gap: 12%;
+  padding: 24px;
+  background: #29261e;
+  color: #e5d5a5;
+}
+.consignment-ribbon span {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+}
+.consignment-ribbon :global(svg),
+.consignment-category :global(svg) {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+.consignment-category-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  padding: 0 5%;
+}
+.consignment-category {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 24px 16px;
+  border: 1px solid #ae995e;
+  background: #fffdf8;
+  text-decoration: none;
+}
+.consignment-category strong,
+.consignment-category small {
+  display: block;
+}
+.consignment-category small {
+  font-size: 12px;
+}
+@media (max-width: 680px) {
+  .consignment-category-grid {
+    grid-template-columns: 1fr;
+  }
 }
 .comparison {
   max-width: 980px;
