@@ -17,11 +17,13 @@ const { store } = Astro.props;
   <section
     class="mx-auto grid max-w-5xl gap-10 px-5 py-16 lg:grid-cols-[1fr_1.1fr]"
   >
-    <div
-      class="grid min-h-80 place-items-center rounded-2xl bg-gradient-to-br from-ink-100 to-gold-50 text-7xl"
+    <img
+      src={link(store.image)}
+      alt={`${store.name}が入る建物の外観`}
+      width={store.imageWidth}
+      height={store.imageHeight}
+      class="h-auto w-full rounded-2xl"
     >
-      🏬
-    </div>
     <div>
       <h2 class="text-2xl font-bold text-ink-950">店舗情報</h2>
       <dl
@@ -43,16 +45,14 @@ const { store } = Astro.props;
         </div>
         <div class="grid grid-cols-[7rem_1fr] gap-4 py-4">
           <dt class="font-bold text-stone-500">アクセス</dt>
-          <dd>{store.access}</dd>
+          <dd class="grid gap-2">
+            {store.access.map((route: string) => <p>{route}</p>)}
+          </dd>
         </div>
       </dl>
-      <div class="mt-6 flex flex-wrap gap-2">
-        {store.features.map((feature: string) => (
-          <span class="rounded-full bg-ink-50 px-3 py-2 text-sm text-ink-800">
-            {feature}
-          </span>
-        ))}
-      </div>
+      <p class="mt-6 text-sm text-stone-600">
+        店舗での査定・買取は完全予約制です。事前にご予約のうえお越しください。
+      </p>
       <a
         href={link('/contact/')}
         class="mt-8 inline-block rounded-full bg-ink-800 px-6 py-3 font-bold text-white"

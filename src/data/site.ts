@@ -13,8 +13,10 @@ export type Store = {
   address: string;
   phone: string;
   hours: string;
-  access: string;
-  features: string[];
+  access: string[];
+  image: string;
+  imageWidth: number;
+  imageHeight: number;
 };
 
 export type Case = {
@@ -32,7 +34,8 @@ export type Case = {
 export const site = {
   name: '買取のResale Mille（リセールミル）',
   shortName: 'Resale Mille',
-  tel: '0120-000-000',
+  tel: '0463-64-2885',
+  hours: '10:00〜22:00（年中無休）',
   catch: 'あなたの「想い」を、次の世代へ繋ぐ。',
 };
 
@@ -94,34 +97,46 @@ export const brands = [
 
 export const stores: Store[] = [
   {
-    slug: 'kanda',
-    name: '神田駅前店',
-    area: '東京都千代田区',
-    address: '東京都千代田区神田○○ 1-2-3 つなぐビル 1F',
-    phone: '03-0000-0001',
-    hours: '10:00〜19:00（年中無休）',
-    access: 'JR「神田駅」東口より徒歩3分',
-    features: ['駅から徒歩3分', '査定無料', '完全予約制'],
+    slug: 'ginza',
+    name: '銀座店',
+    area: '東京都中央区',
+    address: '〒104-0061 東京都中央区銀座3-4-1 大倉別館5Ｆ',
+    phone: site.tel,
+    hours: site.hours,
+    access: [
+      '東京メトロ銀座線/丸の内線/日比谷線「銀座駅」 徒歩4分',
+      'JR/東京メトロ有楽町線「有楽町駅」 徒歩5分',
+    ],
+    image: '/images/store-ginza.jpg',
+    imageWidth: 1056,
+    imageHeight: 528,
   },
   {
-    slug: 'kichijoji',
-    name: '吉祥寺店',
-    area: '東京都武蔵野市',
-    address: '東京都武蔵野市吉祥寺○○ 4-5-6',
-    phone: '0422-00-0002',
-    hours: '10:00〜19:00（火曜定休）',
-    access: 'JR「吉祥寺駅」北口より徒歩5分',
-    features: ['商店街すぐ', '女性査定員在籍', '出張相談可'],
+    slug: 'hiratsuka',
+    name: '平塚店',
+    area: '神奈川県平塚市',
+    address: '〒254-0034 神奈川県平塚市宝町３番１号 平塚ＭＮビル（商業棟）2F',
+    phone: site.tel,
+    hours: site.hours,
+    access: ['JR平塚駅 徒歩1分'],
+    image: '/images/store-hiratsuka.png',
+    imageWidth: 1206,
+    imageHeight: 958,
   },
   {
     slug: 'yokohama',
-    name: '横浜関内店',
+    name: '横浜店',
     area: '神奈川県横浜市',
-    address: '神奈川県横浜市中区関内○○ 7-8-9',
-    phone: '045-000-0003',
-    hours: '10:00〜18:30（水曜定休）',
-    access: 'JR「関内駅」北口より徒歩4分',
-    features: ['近隣駐車場あり', '査定無料', '遺品整理相談'],
+    address: '〒220-0011 神奈川県横浜市西区高島2-19-12 横浜スカイビル20F',
+    phone: site.tel,
+    hours: site.hours,
+    access: [
+      'JR、京浜急行電鉄、東急電鉄東横線、相模鉄道、横浜市営地下鉄ブルーライン、みなとみらい線「横浜」駅東口 直結',
+      'みなとみらい線「新高島」駅2番出口 徒歩6分',
+    ],
+    image: '/images/store-yokohama.jpg',
+    imageWidth: 1056,
+    imageHeight: 528,
   },
 ];
 
