@@ -66,3 +66,11 @@ GitHub PagesのSourceは **GitHub Actions** のまま使用する。現在は独
 固定バージョンのBiome 2.5.15ではMarkdown・YAMLは非対応のため、`docs/*.md`、README、AGENTS、Actions YAMLは整形・lintされない。ドキュメントの文章・リンク・コード例はレビューで確認する。対応範囲は[Biome公式の言語対応表](https://biomejs.dev/introduction/language-support/)を参照する。
 
 Astroは実験的なHTML全体の解析・整形を有効化している。更新時は差分と `astro check`・ビルド結果を確認する。CSSではTailwind構文を有効化し、別コンポーネント間のセレクターも比較してしまう `noDescendingSpecificity` のみ無効化する。委託販売ページの比較表はキーボードで横スクロールできるようにするため、そのページだけ `noNoninteractiveTabindex` を無効化している。
+
+## フロントエンドCI（Issue #7）
+
+main向けPR（フォークを含む）、mainへのpush、手動実行で `Frontend tests` チェックを確認する。Node.js 22で `npm ci`、`npm test` の順に実行し、Astro/TypeScriptチェック、静的ビルド、Nodeテスト、公開パス検証をすべて行う。
+
+テスト成功後にのみ公開用ビルドとPagesデプロイを実行する。失敗時はActionsの `Frontend tests` ログを確認し、修正をpushして成功を確認する。フォークPRはテストのみで公開しない。PRクローズ時はテストを省略し、既存のプレビュー削除を実行する。
+
+マージ前にPRのChecksで `Frontend tests` の成功を確認する。必須チェックによるマージ制限はワークフローとは別設定であり、管理者がSettings → Rules → Rulesets（またはBranchesの保護ルール）でmainを対象に `Frontend tests` を必須ステータスチェックへ追加する。権限がない場合は管理者へ依頼する。
