@@ -6,13 +6,13 @@ const html = readFileSync(new URL('../dist/consignment/index.html', import.meta.
 const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)[1];
 
 test('委託販売ページはサイト名でサービスと比較表を案内する', () => {
-  assert.match(html, /<title[^>]*>委託販売・スマート委託 \| 買取専門 つなぐ屋<\/title>/);
+  assert.match(html, /<title[^>]*>委託販売・スマート委託 \| 買取のResale Mille（リセールミル）<\/title>/);
   for (const text of ['預かり不要のスマート委託', 'スマート委託の特徴', 'スマート委託と他社の委託販売との比較', 'ご利用の流れ', 'よくあるご質問', 'ご相談・お申し込み']) {
     assert.ok(main.includes(text), `${text} がない`);
   }
   assert.match(main, /手数料は業界最安値の2\.8%/);
-  assert.match(main, /<th scope="col"[^>]*>買取専門 つなぐ屋<\/th>/);
-  assert.doesNotMatch(main, /TIME\s*GRACE|03-5801-5888/i);
+  assert.match(main, /<th scope="col"[^>]*>買取のResale Mille（リセールミル）<\/th>/);
+  assert.doesNotMatch(main, /TIME\s*GRACE|つなぐ屋|03-5801-5888/i);
 });
 
 test('申込み手順と最下部から指定の電話・LINE・メールへ進める', () => {

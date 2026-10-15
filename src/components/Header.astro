@@ -1,18 +1,20 @@
 ---
 import { link } from '../lib/paths';
 import { site } from '../data/site';
+const navigation = [['/', 'TOP'], ['/items/', '買取品目'], ['/brands/', '買取強化ブランド'], ['/cases/', '買取実績'], ['/consignment/', '委託販売'], ['/faq/', 'よくある質問'], ['/stores/', '店舗案内'], ['/contact/', 'お問い合わせ']];
 ---
-
-<header class="sticky top-0 z-30 border-b border-stone-200 bg-white/95 backdrop-blur">
-	<div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
-		<a href={link('/')} class="flex items-center gap-3" aria-label={`${site.name} トップ`}>
-			<span class="grid size-10 place-items-center rounded-full bg-emerald-800 text-lg text-white">つ</span>
-			<span class="leading-tight"><strong class="block text-sm tracking-[0.18em] text-emerald-950">{site.name}</strong><span class="text-xs text-stone-500">査定・相談無料</span></span>
-		</a>
-		<nav class="hidden items-center gap-4 text-xs font-medium text-stone-700 lg:flex xl:gap-6 xl:text-sm" aria-label="メインナビゲーション">
-			<a href={link('/stores/')}>店舗を探す</a><a href={link('/items/')}>買取品目</a><a href={link('/cases/')}>買取実績</a><a href={link('/consignment/')}>委託販売</a><a href={link('/faq/')}>よくある質問</a>
-			<a href={link('/contact/')} class="rounded-full bg-emerald-800 px-5 py-3 text-white">無料相談・お問い合わせ</a>
-		</nav>
-		<details class="relative lg:hidden"><summary class="cursor-pointer list-none rounded border border-stone-300 px-3 py-2 text-sm">メニュー</summary><nav class="absolute right-0 mt-2 grid w-56 gap-1 rounded-xl border border-stone-200 bg-white p-3 shadow-xl"><a href={link('/stores/')}>店舗を探す</a><a href={link('/items/')}>買取品目</a><a href={link('/cases/')}>買取実績</a><a href={link('/consignment/')}>委託販売</a><a href={link('/faq/')}>よくある質問</a><a href={link('/contact/')} class="mt-2 rounded-lg bg-emerald-800 px-3 py-2 text-center text-white">お問い合わせ</a></nav></details>
-	</div>
+<header class="site-header">
+  <div class="header-inner">
+    <a href={link('/')} class="brand-lockup" aria-label={`${site.name} トップ`}>
+      <svg viewBox="0 0 48 48" class="brand-mark" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M24 36C9 10 9 2 12 6s26 35 27 25C42 9 28 5 24 25S8 48 7 31C5 17 20 10 24 25S40 48 41 31C43 17 28 10 24 36Z" /></svg>
+      <span><span class="brand-kicker">買取の</span><strong>Resale Mille</strong><span class="brand-reading">リセールミル</span></span>
+    </a>
+    <nav class="desktop-nav" aria-label="メインナビゲーション">
+      {navigation.map(([href, label]) => <a href={link(href)} aria-current={Astro.url.pathname === link(href) ? 'page' : undefined}>{label}</a>)}
+    </nav>
+    <details class="mobile-menu">
+      <summary>メニュー</summary>
+      <nav aria-label="モバイルナビゲーション">{navigation.map(([href, label]) => <a href={link(href)}>{label}</a>)}</nav>
+    </details>
+  </div>
 </header>

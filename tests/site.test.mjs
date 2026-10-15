@@ -22,7 +22,7 @@ test('主要な静的ページを生成する', () => {
 test('カスタムドメインのルートパスを内部リンクとアセットに反映する', () => {
   const html = page('index.html');
   assert.match(html, /href="\/stores\/"/);
-  assert.match(html, /src="\/images\/hero-shop\.png"/);
+  assert.match(html, /src="\/images\/hero-resale-mille\.webp"/);
   assert.match(html, /href="\/_astro\/[^\"]+\.css"/);
   assert.match(html, /href="\/favicon\.svg"/);
   assert.doesNotMatch(html, /\/thrift-store\//);
@@ -33,16 +33,37 @@ test('カスタムドメイン設定をビルド成果物に含める', () => {
   assert.equal(readFileSync(new URL('../dist/CNAME', import.meta.url), 'utf8').trim(), 'thrift-store.resalemille.online');
 });
 
-test('ヒーローのメインコピーをデスクトップで途中改行しない', () => {
+test('参考画像のヒーローコピーと3つの相談導線を表示する', () => {
   const html = page('index.html');
-  assert.match(html, /class="md:whitespace-nowrap">想いのある品を、次の誰かへ。<\/span><br>/);
+  assert.match(html, /あなたの「想い」を、<wbr>次の世代へ繋ぐ。/);
+  assert.match(html, /大切なモノを、<wbr>価値あるカタチで。/);
+  const actions = html.match(/<div class="hero-actions"[^>]*>([\s\S]*?)<\/div>/)?.[1];
+  assert.ok(actions, 'ヒーローの導線が見つかりません');
+  const links = [...actions.matchAll(/<a href="([^"]+)"[^>]*>(.*?)<\/a>/g)]
+    .map(([, href, label]) => [href, label.replace(/<[^>]+>[^<]*<\/span>/g, '').trim()]);
+  assert.deepEqual(links, [
+    ['/contact/', '無料でWeb査定・ご相談'],
+    ['/stores/', '店舗を探す'],
+    ['/contact/', '出張買取を予約する'],
+  ]);
 });
 
-test('ヒーロー下部に店舗検索と出張買取予約の大きな導線を表示する', () => {
+test('選ばれる理由の3項目と説明を参考画像に合わせる', () => {
   const html = page('index.html');
-  assert.match(html, /min-h-28 items-center justify-center gap-4 bg-amber-300/);
-  assert.match(html, /href="\/stores\/"[^>]*>.*お店を探す/s);
-  assert.match(html, /href="\/contact\/"[^>]*>.*出張買取を予約する/s);
+  for (const value of ['が選ばれる理由', '高価買取の実績', '幅広い買取対象', '安心・誠実な対応', '専門鑑定士が価値を正確に見極め、最高価格を提示します。', 'ブランド品から貴金属、骨董品まで、多彩なアイテムに対応。', 'お客様の「想い」を尊重し、丁寧で透明性の高い査定。']) {
+    assert.ok(html.includes(value), value);
+  }
+  assert.equal([...html.matchAll(/class="reason-card gold-frame"/g)].length, 3);
+});
+
+test('店名を全ページのタイトル・ヘッダー・フッターで統一する', () => {
+  for (const file of htmlFiles(dist.pathname)) {
+    const html = readFileSync(file, 'utf8');
+    assert.match(html, /<title>[^<]*買取のResale Mille（リセールミル）/);
+    assert.match(html, /aria-label="買取のResale Mille（リセールミル） トップ"/);
+    assert.match(html, /© 2026 買取のResale Mille（リセールミル）/);
+    assert.doesNotMatch(html, /つなぐ屋|TSUNAGUYA/);
+  }
 });
 
 test('トップページに金・貴金属の強化買取セクションを表示する', () => {
@@ -50,7 +71,7 @@ test('トップページに金・貴金属の強化買取セクションを表�
   assert.match(html, /GOLD &amp; PRECIOUS METALS/);
   assert.match(html, /金・貴金属の/);
   assert.match(html, /買取を強化中/);
-  assert.match(html, /src="\/images\/gold-purchase\.png"/);
+  assert.match(html, /src="\/images\/gold-resale-mille\.webp"/);
   assert.match(html, /href="\/items\/gold\/"/);
 });
 
@@ -58,12 +79,19 @@ test('状態にかかわらず相談できる買取セクションを表示す�
   const html = page('index.html');
   assert.match(html, /CONDITION/);
   assert.match(html, /こんな状態のお品物も、まずはご相談ください/);
-  assert.match(html, /lg:whitespace-nowrap">こんな状態のお品物も、まずはご相談ください<\/h2>/);
   assert.match(html, /切れたアクセサリー/);
   assert.match(html, /傷・汚れのあるブランド品/);
   assert.match(html, /動かない時計・カメラ/);
-  assert.match(html, /src="\/images\/condition-purchase\.png"/);
+  assert.match(html, /src="\/images\/condition-resale-mille\.webp"/);
   assert.match(html, /お買取りの可否・金額は/);
+  assert.match(html, /古いお酒・付属品がない品/);
+  for (const description of [
+    '片方だけのピアスや、留め具が壊れたネックレスもご相談ください。',
+    '使用感のあるバッグや小物も、状態を確認して査定します。',
+    '故障や長期保管で動かないお品物も、そのままお持ちください。',
+    '箱や保証書がなくても、まずは実物を拝見してご案内します。',
+  ]) assert.ok(html.includes(description), description);
+  assert.equal([...html.matchAll(/class="condition-card gold-frame"/g)].length, 4);
 });
 
 test('問い合わせフォームは外部サービス未接続の表示に留める', () => {
@@ -100,4 +128,15 @@ test('全内部リンクはカスタムドメイン配下の生成ページを�
       assert.equal(existsSync(destination), true, `${file} のリンク先 ${href} が見つかりません`);
     }
   }
+});
+
+test('新しい写真アセットと全ページ共通のブランド配色をビルドする', () => {
+  for (const file of ['hero-resale-mille.webp', 'gold-resale-mille.webp', 'condition-resale-mille.webp']) {
+    assert.ok(existsSync(new URL(`../dist/images/${file}`, import.meta.url)), file);
+  }
+  const css = readdirSync(new URL('../dist/_astro/', import.meta.url))
+    .filter(name => name.endsWith('.css'))
+    .map(name => readFileSync(new URL(`../dist/_astro/${name}`, import.meta.url), 'utf8')).join('');
+  for (const color of ['#282725', '#ae9865', '#f8f6f0']) assert.ok(css.includes(color), color);
+  assert.ok(css.includes('.shop-section .section-title'), '暗い店舗案内に読みやすい見出し色を指定する');
 });

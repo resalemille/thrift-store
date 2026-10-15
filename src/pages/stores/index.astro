@@ -1,4 +1,4 @@
 ---
 import Layout from '../../layouts/Layout.astro'; import PageHero from '../../components/PageHero.astro'; import StoreCard from '../../components/StoreCard.astro'; import { stores } from '../../data/site';
 ---
-<Layout title="店舗一覧"><PageHero title="店舗を探す" lead="お近くのつなぐ屋をお探しいただけます。掲載情報はすべてダミーです。" eyebrow="SHOP LIST" /><section class="mx-auto max-w-7xl px-5 py-16 lg:px-8"><div class="grid gap-5 lg:grid-cols-3">{stores.map((store) => <StoreCard store={store} />)}</div></section></Layout>
+<Layout title="店舗一覧"><PageHero title="店舗を探す" lead="お近くの買取のResale Mille（リセールミル）をお探しいただけます。掲載情報はすべてダミーです。" eyebrow="SHOP LIST" /><section class="mx-auto max-w-7xl px-5 py-16 lg:px-8"><div class="grid gap-5 lg:grid-cols-3">{stores.map((store) => <StoreCard store={store} />)}</div></section></Layout>
