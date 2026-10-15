@@ -22,7 +22,11 @@ const { store } = Astro.props;
       alt={`${store.name}が入る建物の外観`}
       width={store.imageWidth}
       height={store.imageHeight}
-      class="h-auto w-full rounded-2xl"
+      class="h-auto w-full self-start rounded-2xl object-cover"
+      style={{
+        aspectRatio: `${store.imageContentWidth ?? store.imageWidth} / ${store.imageHeight}`,
+        objectPosition: store.imagePosition ?? 'center',
+      }}
     >
     <div>
       <h2 class="text-2xl font-bold text-ink-950">店舗情報</h2>
