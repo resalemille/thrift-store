@@ -1,0 +1,123 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
+const contacts = [
+  { text: '0463-64-2885', href: 'tel:0463642885' },
+  { text: 'info@resalemille.online', href: 'mailto:info@resalemille.online' },
+  {
+    text: 'https://www.resalemille.online/',
+    href: 'https://www.resalemille.online/',
+  },
+];
+const rows: [string, string[]][] = [
+  [
+    '販売業者',
+    [
+      '会社名：株式会社Resale Mille',
+      '事業の目的：古物営業法に基づく古物営業（ブランド品、腕時計、宝飾品）',
+      '代表取締役：古山 竣也',
+      '本店所在地：神奈川県平塚市纏一丁目２８番７号',
+      '代表番号：0463-64-2885',
+      '資本金：800万円',
+      'メールアドレス：info@resalemille.online',
+      'ホームページURL：https://www.resalemille.online/',
+    ],
+  ],
+  ['運営統括責任者名', ['古山 竣也']],
+  ['郵便番号', ['2540901']],
+  ['本店所在地', ['神奈川県平塚市纏一丁目２８番７号']],
+  [
+    '電話番号',
+    [
+      '0463-64-2885',
+      '※恐れ入りますが、お電話での営業・セールス活動は一切お断りしております。',
+    ],
+  ],
+  ['電話受付時間', ['10:00-22:00']],
+  ['メールアドレス', ['info@resalemille.online']],
+  ['ホームページURL', ['https://www.resalemille.online/']],
+  [
+    '販売価格',
+    [
+      '各商品ページをご参照ください。',
+      '商品ごとに表示された税込み価格に基づきます。',
+    ],
+  ],
+  [
+    '支払方法と支払時期',
+    [
+      '銀行振込（振込手数料はお客様負担）／代金引換／ショッピングローン／クレジットカード',
+      '銀行振込の支払期限：お申し込みの日から3日以内',
+      '※3日以内にご入金が確認できない場合は、キャンセルとみなします。',
+    ],
+  ],
+  [
+    '引き渡し時期',
+    [
+      '在庫がある場合は、支払い確認後から約3日から7日程（実営業日）です。在庫がない場合やお取引条件によって、通常より日数がかかる場合は別途、弊社からご連絡します。',
+      '※遠方一部地域によっては、通常よりお時間をいただく場合がありますので、あらかじめご了承ください。',
+    ],
+  ],
+  [
+    '商品代金以外の必要料金',
+    [
+      '送料：全国一律送料無料',
+      '代引き手数料：10％',
+      '※お振込の際の振込手数料はお客様負担となります。',
+    ],
+  ],
+  ['返品・交換・キャンセル等', []],
+  ['資格・免許', ['古物商許可証 神奈川県公安委員会 第452680013552号']],
+];
+---
+
+<Layout title="特定商取引法に基づく表記">
+  <PageHero
+    title="特定商取引法に基づく表記"
+    lead="株式会社Resale Milleの販売条件・事業者情報をご案内します。"
+    eyebrow="LEGAL NOTICE"
+  />
+  <section class="mx-auto max-w-4xl px-5 py-16">
+    <dl class="divide-y divide-stone-200 border-y border-stone-200">
+      {rows.map(([label, values]) => (
+        <div class="grid gap-2 py-5 sm:grid-cols-[11rem_1fr] sm:gap-6">
+          <dt class="font-bold text-stone-500">{label}</dt>
+          <dd class="min-w-0 space-y-2 break-words leading-7 text-ink-950">
+            {values.map((value) => {
+              const contact = contacts.find(({ text }) => value.endsWith(text));
+              return (
+                <p>
+                  {contact ? (
+                    <>
+                      {value.slice(0, -contact.text.length)}
+                      <a
+                        class="underline underline-offset-4 hover:text-stone-500"
+                        href={contact.href}
+                      >
+                        {contact.text}
+                      </a>
+                    </>
+                  ) : (
+                    value
+                  )}
+                </p>
+              );
+            })}
+            {label === '返品・交換・キャンセル等' && (
+              <p>
+                返品特約：
+                <a
+                  class="underline underline-offset-4 hover:text-stone-500"
+                  href="https://www.resalemille.online/shipping-returns"
+                >
+                  配送・返品について
+                </a>
+                をご参照ください。
+              </p>
+            )}
+          </dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+</Layout>

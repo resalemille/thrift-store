@@ -160,8 +160,7 @@ test('問い合わせフォームは外部サービス未接続の表示に留�
   assert.match(html, /<button type="button"/);
 });
 
-test('ダミーであることを明示する', () => {
-  assert.match(page('company/index.html'), /ダミー/);
+test('未確定のプライバシーポリシーはダミーであることを明示する', () => {
   assert.match(page('privacy/index.html'), /ダミー/);
 });
 
