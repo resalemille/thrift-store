@@ -1,28 +1,44 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import PageHero from '../../components/PageHero.astro';
-const rows = [
-  ['会社名', '買取のResale Mille（リセールミル）（ダミー）'],
-  ['所在地', '東京都千代田区神田○○ 1-2-3'],
-  ['代表者', '代表取締役 山田 太郎'],
-  ['設立', '2020年4月'],
-  ['事業内容', 'リユース品の買取・販売'],
-  ['古物商許可番号', '東京都公安委員会 第000000000000号（ダミー）'],
+const rows: [string, string[]][] = [
+  ['会社名', ['株式会社Resale Mille']],
+  ['代表者', ['代表取締役 古山 竣也']],
+  [
+    '事業の目的',
+    ['古物営業法に基づく古物営業', '（主にブランド品、腕時計、宝飾品）'],
+  ],
+  ['古物商営業許可証', ['神奈川県公安委員会 第452680013552号']],
+  [
+    '店舗所在地',
+    [
+      '神奈川県平塚市宝町3番1号 平塚MNビル2階',
+      '神奈川県横浜市西区高島2-19-12 横浜スカイビル20F',
+      '東京都中央区銀座3-4-1 大倉別館5Ｆ',
+    ],
+  ],
+  ['事務所所在地', ['神奈川県平塚市纏1-28-7']],
+  ['資本金', ['800万円']],
+  ['営業時間', ['10:00-22:00']],
 ];
 ---
 
 <Layout title="会社概要"
   ><PageHero
     title="会社概要"
-    lead="買取のResale Mille（リセールミル）の会社情報です。現在の掲載内容はすべてダミーです。"
+    lead="買取のResale Mille（リセールミル）の会社情報です。"
     eyebrow="COMPANY"
   />
   <section class="mx-auto max-w-4xl px-5 py-16">
     <dl class="divide-y divide-stone-200 border-y border-stone-200">
-      {rows.map(([label, value]) => (
+      {rows.map(([label, values]) => (
         <div class="grid gap-2 py-5 sm:grid-cols-[11rem_1fr]">
           <dt class="font-bold text-stone-500">{label}</dt>
-          <dd class="text-ink-950">{value}</dd>
+          <dd class="min-w-0 space-y-2 break-words leading-7 text-ink-950">
+            {values.map((value) => (
+              <p>{value}</p>
+            ))}
+          </dd>
         </div>
       ))}
     </dl>

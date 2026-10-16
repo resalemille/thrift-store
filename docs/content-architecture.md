@@ -18,3 +18,9 @@
 `npm run test:unit` はビルドせずに `tests/unit/` の単体テストを実行します。Node.js 22.12以上の型除去機能を使用するため、テスト対象のTypeScript間のimportには `.ts` を明記し、実行時の変換が必要なTypeScript構文は使用しません。`npm test` にも含まれます。
 
 現在、実績の品目・店舗は表示名で関連付けています。名称変更時は実績側も更新してください。単体テストではslugの重複・形式と、実績の参照先・価格を確認します。HTMLの表示・リンク・画像は既存のビルド後テストで確認します。データ項目や表示を拡張するときは、必要な単体テストとページ検証をそれぞれ更新します。
+
+## 会社情報と販売条件
+
+会社概要は `src/pages/company/index.astro`、特定商取引法に基づく表記は `src/pages/tokushoho/index.astro` で管理します。フッターから両ページに移動できます。
+
+会社概要はIssue #35の指定内容（平塚市の重複を修正）と、公式サイトで確認した代表者を掲載しています。特定商取引法の全項目は https://www.resalemille.online/tokushoho を参照し、返品特約は https://www.resalemille.online/shipping-returns にリンクします。販売条件の変更時は参照元との整合性を確認してください。引き渡し時期は特定商取引法の参照元に合わせています。
