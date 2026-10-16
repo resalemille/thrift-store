@@ -1,6 +1,14 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import PageHero from '../../components/PageHero.astro';
+const contacts = [
+  { text: '0463-64-2885', href: 'tel:0463642885' },
+  { text: 'info@resalemille.online', href: 'mailto:info@resalemille.online' },
+  {
+    text: 'https://www.resalemille.online/',
+    href: 'https://www.resalemille.online/',
+  },
+];
 const rows: [string, string[]][] = [
   [
     '販売業者',
@@ -75,9 +83,26 @@ const rows: [string, string[]][] = [
         <div class="grid gap-2 py-5 sm:grid-cols-[11rem_1fr] sm:gap-6">
           <dt class="font-bold text-stone-500">{label}</dt>
           <dd class="min-w-0 space-y-2 break-words leading-7 text-ink-950">
-            {values.map((value) => (
-              <p>{value}</p>
-            ))}
+            {values.map((value) => {
+              const contact = contacts.find(({ text }) => value.endsWith(text));
+              return (
+                <p>
+                  {contact ? (
+                    <>
+                      {value.slice(0, -contact.text.length)}
+                      <a
+                        class="underline underline-offset-4 hover:text-stone-500"
+                        href={contact.href}
+                      >
+                        {contact.text}
+                      </a>
+                    </>
+                  ) : (
+                    value
+                  )}
+                </p>
+              );
+            })}
             {label === '返品・交換・キャンセル等' && (
               <p>
                 返品特約：

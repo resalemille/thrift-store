@@ -77,3 +77,24 @@ test('フッターから特定商取引法のページに移動できる', () =>
     /href="\/tokushoho\/"[^>]*>特定商取引法に基づく表記<\/a>/,
   );
 });
+
+test('販売業者欄と個別欄の電話・メール・ホームページをリンクにする', () => {
+  const html = main(page('tokushoho'));
+  const links = [
+    ...html.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g),
+  ];
+  for (const [href, text] of [
+    ['tel:0463642885', '0463-64-2885'],
+    ['mailto:info@resalemille.online', 'info@resalemille.online'],
+    ['https://www.resalemille.online/', 'https://www.resalemille.online/'],
+  ]) {
+    const matches = links.filter(
+      (link) => link[1] === href && link[2].trim() === text,
+    );
+    assert.equal(
+      matches.length,
+      2,
+      `${text} は販売業者欄と個別欄の両方でリンクにする`,
+    );
+  }
+});
