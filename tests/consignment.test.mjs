@@ -31,7 +31,7 @@ test('委託販売ページはサイト名でサービスと比較表を案内�
   assert.doesNotMatch(main, /TIME\s*GRACE|つなぐ屋|03-5801-5888/i);
 });
 
-test('冒頭だけWeb相談1ボタンとし、既存の連絡先・4ステップ・保管条件を維持する', () => {
+test('冒頭だけWeb相談1ボタンとし、既存の連絡先・4ステップを維持する', () => {
   assert.equal([...main.matchAll(/href="\/contact\/"/g)].length, 6);
   assert.equal([...main.matchAll(/href="tel:0463642885"/g)].length, 2);
   assert.equal(
@@ -49,8 +49,6 @@ test('冒頭だけWeb相談1ボタンとし、既存の連絡先・4ステップ
   assert.match(main, /お申し込みはLINE・メール・お電話/);
   assert.doesNotMatch(main, /スマート委託|2\.8[%％]|SMART|またはご来店/);
   assert.equal([...main.matchAll(/class="step-number"/g)].length, 4);
-  assert.match(main, /撮影時のみ/);
-  assert.match(main, /ご自宅/);
   assert.match(main, /郵送にて時計をお預かり/);
   for (const text of [
     '腕時計',
@@ -60,7 +58,7 @@ test('冒頭だけWeb相談1ボタンとし、既存の連絡先・4ステップ
     '販売額も手数料も明確に',
     '5%＋消費税額 ※実質15%',
     '800万円以上で3%',
-    '販売価格を伝えないため実態は不明',
+    '販売価格が不透明で実態は不明',
     '市場で売れる最大金額を目指す',
   ]) {
     assert.ok(main.includes(text), `${text} がない`);
@@ -98,4 +96,58 @@ test('指定の透過時計画像を配信し、比較表と共通ナビゲー�
     'utf8',
   );
   assert.equal([...home.matchAll(/href="\/consignment\/"/g)].length, 3);
+});
+
+test('Issue #41の比較条件と成約時の案内を表示する', () => {
+  const rows = [...main.matchAll(/<tr[^>]*>([\s\S]*?)<\/tr>/g)].map(([, row]) =>
+    [...row.matchAll(/<t[hd]\b[^>]*>([\s\S]*?)<\/t[hd]>/g)].map(([, cell]) =>
+      cell
+        .replace(/<[^>]*>/g, '')
+        .trim()
+        .replace(/^[◎○×]\s*/, ''),
+    ),
+  );
+  const row = (label) => rows.find((cells) => cells[0] === label).slice(1);
+  assert.deepEqual(row('お預かり条件'), [
+    '条件なし。',
+    '100万以上かつロレックス等主要時計ブランドのみ',
+    '30万以上（ヴィンテージを除く）',
+    '100万以上の一部人気モデルのみ',
+  ]);
+  assert.equal(
+    row('保管場所')[0],
+    '住所秘匿の保管場所（常駐の専用セキュリティ付き）',
+  );
+  assert.deepEqual(row('手数料'), [
+    '1%〜',
+    '800万円以上で3%（販売価格が不透明で実態は不明）',
+    '7%（販売価格が不透明で実態は不明）',
+    '5%＋消費税額 ※実質15%（販売価格が不透明で実態は不明）',
+  ]);
+  assert.deepEqual(row('販売方法'), [
+    '各ECサイト＋Googlemerchant広告＋SNS広告（一部店頭含む）',
+    '店頭・ECサイト',
+    '店頭',
+    '店頭・ECサイト',
+  ]);
+  assert.match(
+    main,
+    /成約した場合は、お品物をご成約者様へ納品し、金融機関にて3営業日以内にご入金いたします。/,
+  );
+  assert.doesNotMatch(
+    main,
+    /時計のお預かり|撮影時のみ|ご自宅|商品をご郵送いただくか/,
+  );
+});
+
+test('FAQはIssue #41で指定された回答を表示する', () => {
+  const answers = [
+    '手数料は1%〜です。決済方法や購入媒体、広告費等で変動いたします。可能な限り手数料の低い販売方法を目指します。',
+    '2か月間は、原則できません。2か月間でご成約がない場合は、更新or買取orご返却かをお申し付けください。',
+    '原則弊社が負担いたします。保険を付けたい場合などは別途ご相談とさせて頂きます。',
+    '委託販売では、当店や各種ECサイトに出品します。販売価格はご希望のお手取り額や相場をもとに、ご相談のうえ決定します。',
+    '商品代金はご成約者様への納品完了後、金融機関にて3営業日以内にご入金いたします。',
+  ];
+  const faq = main.match(/<section class="faq"[\s\S]*?<\/section>/)[0];
+  for (const answer of answers) assert.ok(faq.includes(answer), answer);
 });
