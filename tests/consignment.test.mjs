@@ -99,3 +99,20 @@ test('指定の透過時計画像を配信し、比較表と共通ナビゲー�
   );
   assert.equal([...home.matchAll(/href="\/consignment\/"/g)].length, 3);
 });
+
+test('選ばれる理由は3つの枠にアイコン・見出し・説明を維持する', () => {
+  const features = main.match(
+    /<section[^>]*aria-labelledby="features-title"[\s\S]*?<\/section>/,
+  )[0];
+  const cards = [
+    ...features.matchAll(
+      /<article[^>]*class="consignment-reason gold-frame"[^>]*>([\s\S]*?)<\/article>/g,
+    ),
+  ];
+  assert.equal(cards.length, 3);
+  for (const [, card] of cards) {
+    assert.match(card, /<svg\b/);
+    assert.match(card, /<h3[^>]*>[^<]+<\/h3>/);
+    assert.match(card, /<p[^>]*>[^<]+<\/p>/);
+  }
+});
