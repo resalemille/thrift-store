@@ -151,3 +151,20 @@ test('FAQはIssue #41で指定された回答を表示する', () => {
   const faq = main.match(/<section class="faq"[\s\S]*?<\/section>/)[0];
   for (const answer of answers) assert.ok(faq.includes(answer), answer);
 });
+
+test('選ばれる理由は3つの枠にアイコン・見出し・説明を維持する', () => {
+  const features = main.match(
+    /<section[^>]*aria-labelledby="features-title"[\s\S]*?<\/section>/,
+  )[0];
+  const cards = [
+    ...features.matchAll(
+      /<article[^>]*class="consignment-reason gold-frame"[^>]*>([\s\S]*?)<\/article>/g,
+    ),
+  ];
+  assert.equal(cards.length, 3);
+  for (const [, card] of cards) {
+    assert.match(card, /<svg\b/);
+    assert.match(card, /<h3[^>]*>[^<]+<\/h3>/);
+    assert.match(card, /<p[^>]*>[^<]+<\/p>/);
+  }
+});
