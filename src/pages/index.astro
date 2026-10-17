@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import CategoryLink from '../components/CategoryLink.astro';
 import BrandIcon from '../components/BrandIcon.astro';
 import SectionTitle from '../components/SectionTitle.astro';
 import CaseCard from '../components/CaseCard.astro';
@@ -11,6 +12,8 @@ import { news } from '../data/news';
 import { site } from '../data/site';
 import { stores } from '../data/stores';
 import { link } from '../lib/paths';
+
+const featuredItems = items.filter((item) => item.featured);
 
 const reasons = [
   {
@@ -123,7 +126,7 @@ const conditions = [
 
   <section class="category-section silk-panel" aria-labelledby="items-title">
     <div class="category-ribbon" aria-hidden="true">
-      {items.map((item) => (
+      {featuredItems.map((item) => (
         <span>
           <BrandIcon name={item.slug} />
           <span>{item.name}</span>
@@ -136,18 +139,7 @@ const conditions = [
         掲載のないお品物も、まずはお気軽にご相談ください。
       </p>
       <div class="category-grid">
-        {items.map((item) => (
-          <a href={link(`/items/${item.slug}/`)} class="category-link">
-            <BrandIcon name={item.slug} />
-            <span>
-              <strong>{item.name}</strong>
-              <small>{item.description}</small>
-            </span>
-            <span class="category-arrow" aria-hidden="true">
-              ›
-            </span>
-          </a>
-        ))}
+        {featuredItems.map((item) => <CategoryLink item={item} />)}
       </div>
       <a href={link('/items/')} class="section-more">品目一覧を見る →</a>
     </div>
