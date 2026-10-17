@@ -1,4 +1,5 @@
 ---
+import ContentContainer from '../../components/ContentContainer.astro';
 import Layout from '../../layouts/Layout.astro';
 import { cases } from '../../data/cases';
 import { link } from '../../lib/paths';
@@ -12,7 +13,7 @@ const { item } = Astro.props;
 ---
 
 <Layout title={item.title}
-  ><article class="mx-auto max-w-4xl px-5 py-16">
+  ><ContentContainer as="article" width="reading">
     <a href={link('/cases/')} class="text-sm font-bold text-ink-800"
       >← 買取実績一覧へ</a
     >
@@ -51,5 +52,5 @@ const { item } = Astro.props;
         ブランド、状態、付属品、市場の需要などを総合的に確認します。箱や保証書、替えベルトなどがある場合は、あわせてお持ちいただくことをおすすめします。
       </p>
     </section>
-  </article></Layout
+  </ContentContainer></Layout
 >

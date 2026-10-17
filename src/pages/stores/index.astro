@@ -1,4 +1,5 @@
 ---
+import ContentContainer from '../../components/ContentContainer.astro';
 import Layout from '../../layouts/Layout.astro';
 import PageHero from '../../components/PageHero.astro';
 import StoreCard from '../../components/StoreCard.astro';
@@ -11,9 +12,9 @@ import { stores } from '../../data/stores';
     lead="お近くの買取のResale Mille（リセールミル）の店舗をお選びいただけます。ご来店は完全予約制です。お品物について事前にお伺いし、スムーズな査定と、安心してご相談いただける丁寧なサービスをご提供します。"
     eyebrow="SHOP LIST"
   />
-  <section class="mx-auto max-w-7xl px-5 py-16 lg:px-8">
+  <ContentContainer>
     <div class="grid gap-5 lg:grid-cols-3">
       {stores.map((store) => <StoreCard store={store} />)}
     </div>
-  </section></Layout
+  </ContentContainer></Layout
 >

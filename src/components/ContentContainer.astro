@@ -1,0 +1,16 @@
+---
+interface Props {
+  as?: 'section' | 'article' | 'div';
+  width?: 'wide' | 'reading';
+}
+const { as: Tag = 'section', width = 'wide' }: Props = Astro.props;
+---
+
+<Tag
+  class:list={[
+    'mx-auto px-5 py-16',
+    width === 'wide' ? 'max-w-7xl lg:px-8' : 'max-w-4xl',
+  ]}
+>
+  <slot />
+</Tag>

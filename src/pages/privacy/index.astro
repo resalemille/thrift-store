@@ -1,11 +1,12 @@
 ---
+import ContentContainer from '../../components/ContentContainer.astro';
 import Layout from '../../layouts/Layout.astro';
 import PageHero from '../../components/PageHero.astro';
 ---
 
 <Layout title="プライバシーポリシー"
   ><PageHero title="プライバシーポリシー" eyebrow="PRIVACY POLICY" />
-  <article class="mx-auto max-w-4xl px-5 py-16">
+  <ContentContainer as="article" width="reading">
     <p class="leading-8 text-stone-600">
       買取のResale
       Mille（リセールミル）（以下「当社」）は、お客様の個人情報を適切に取り扱います。本ページはダミー文面であり、公開前に事業内容と運用にあわせて内容を確定してください。
@@ -35,5 +36,5 @@ import PageHero from '../../components/PageHero.astro';
         </section>
       ))}
     </div>
-  </article></Layout
+  </ContentContainer></Layout
 >
