@@ -1,5 +1,7 @@
 ---
+import ContentContainer from '../../components/ContentContainer.astro';
 import Layout from '../../layouts/Layout.astro';
+import InfoRow from '../../components/InfoRow.astro';
 import PageHero from '../../components/PageHero.astro';
 const rows: [string, string[]][] = [
   ['会社名', ['株式会社Resale Mille']],
@@ -29,18 +31,15 @@ const rows: [string, string[]][] = [
     lead="買取のResale Mille（リセールミル）の会社情報です。"
     eyebrow="COMPANY"
   />
-  <section class="mx-auto max-w-4xl px-5 py-16">
+  <ContentContainer width="reading">
     <dl class="divide-y divide-stone-200 border-y border-stone-200">
       {rows.map(([label, values]) => (
-        <div class="grid gap-2 py-5 sm:grid-cols-[11rem_1fr]">
-          <dt class="font-bold text-stone-500">{label}</dt>
-          <dd class="min-w-0 space-y-2 break-words leading-7 text-ink-950">
-            {values.map((value) => (
-              <p>{value}</p>
-            ))}
-          </dd>
-        </div>
+        <InfoRow label={label}>
+          {values.map((value) => (
+            <p>{value}</p>
+          ))}
+        </InfoRow>
       ))}
     </dl>
-  </section></Layout
+  </ContentContainer></Layout
 >

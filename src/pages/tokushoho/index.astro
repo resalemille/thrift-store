@@ -1,5 +1,7 @@
 ---
+import ContentContainer from '../../components/ContentContainer.astro';
 import Layout from '../../layouts/Layout.astro';
+import InfoRow from '../../components/InfoRow.astro';
 import PageHero from '../../components/PageHero.astro';
 const contacts = [
   { text: '0463-64-2885', href: 'tel:0463642885' },
@@ -77,47 +79,44 @@ const rows: [string, string[]][] = [
     lead="株式会社Resale Milleの販売条件・事業者情報をご案内します。"
     eyebrow="LEGAL NOTICE"
   />
-  <section class="mx-auto max-w-4xl px-5 py-16">
+  <ContentContainer width="reading">
     <dl class="divide-y divide-stone-200 border-y border-stone-200">
       {rows.map(([label, values]) => (
-        <div class="grid gap-2 py-5 sm:grid-cols-[11rem_1fr] sm:gap-6">
-          <dt class="font-bold text-stone-500">{label}</dt>
-          <dd class="min-w-0 space-y-2 break-words leading-7 text-ink-950">
-            {values.map((value) => {
-              const contact = contacts.find(({ text }) => value.endsWith(text));
-              return (
-                <p>
-                  {contact ? (
-                    <>
-                      {value.slice(0, -contact.text.length)}
-                      <a
-                        class="underline underline-offset-4 hover:text-stone-500"
-                        href={contact.href}
-                      >
-                        {contact.text}
-                      </a>
-                    </>
-                  ) : (
-                    value
-                  )}
-                </p>
-              );
-            })}
-            {label === '返品・交換・キャンセル等' && (
+        <InfoRow label={label} spacious>
+          {values.map((value) => {
+            const contact = contacts.find(({ text }) => value.endsWith(text));
+            return (
               <p>
-                返品特約：
-                <a
-                  class="underline underline-offset-4 hover:text-stone-500"
-                  href="https://www.resalemille.online/shipping-returns"
-                >
-                  配送・返品について
-                </a>
-                をご参照ください。
+                {contact ? (
+                  <>
+                    {value.slice(0, -contact.text.length)}
+                    <a
+                      class="underline underline-offset-4 hover:text-stone-500"
+                      href={contact.href}
+                    >
+                      {contact.text}
+                    </a>
+                  </>
+                ) : (
+                  value
+                )}
               </p>
-            )}
-          </dd>
-        </div>
+            );
+          })}
+          {label === '返品・交換・キャンセル等' && (
+            <p>
+              返品特約：
+              <a
+                class="underline underline-offset-4 hover:text-stone-500"
+                href="https://www.resalemille.online/shipping-returns"
+              >
+                配送・返品について
+              </a>
+              をご参照ください。
+            </p>
+          )}
+        </InfoRow>
       ))}
     </dl>
-  </section>
+  </ContentContainer>
 </Layout>

@@ -1,0 +1,34 @@
+---
+interface Props {
+  question: string;
+  answer: string;
+  variant?: 'card' | 'list';
+  open?: boolean;
+}
+const { question, answer, variant = 'list', open = false } = Astro.props;
+const card = variant === 'card';
+---
+
+<details
+  class={card
+    ? 'rounded-xl border border-stone-200 p-5'
+    : 'group border-b border-stone-200 py-6'}
+  open={open}
+>
+  <summary
+    class={card
+      ? 'cursor-pointer font-bold text-ink-950'
+      : 'flex cursor-pointer list-none gap-4 font-bold text-ink-950'}
+  >
+    {!card && <span class="text-ink-700">Q</span>}
+    {question}
+  </summary>
+  <p
+    class={card
+      ? 'mt-4 text-sm leading-7 text-stone-600'
+      : 'ml-8 mt-5 leading-8 text-stone-600'}
+  >
+    {!card && <span class="mr-3 font-bold text-gold-600">A</span>}
+    {answer}
+  </p>
+</details>
