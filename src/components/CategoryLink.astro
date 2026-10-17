@@ -1,0 +1,18 @@
+---
+import BrandIcon from './BrandIcon.astro';
+import type { Item } from '../data/items';
+import { link } from '../lib/paths';
+interface Props {
+  item: Item;
+}
+const { item } = Astro.props;
+---
+
+<a href={link(`/items/${item.slug}/`)} class="category-link">
+  <BrandIcon name={item.slug} />
+  <span>
+    <strong>{item.name}</strong>
+    <small>{item.description}</small>
+  </span>
+  <span class="category-arrow" aria-hidden="true">›</span>
+</a>
