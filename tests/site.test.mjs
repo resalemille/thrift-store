@@ -97,7 +97,9 @@ test('店名を全ページのタイトル・ヘッダー・フッターで統�
     assert.match(html, /<title>[^<]*買取のResale Mille（リセールミル）/);
     assert.match(
       html,
-      /aria-label="買取のResale Mille（リセールミル） トップ"/,
+      file.endsWith('/order/index.html')
+        ? /aria-label="お取り寄せのResale Mille（リセールミル） トップ"/
+        : /aria-label="買取のResale Mille（リセールミル） トップ"/,
     );
     assert.match(html, /© 2026 買取のResale Mille（リセールミル）/);
     assert.doesNotMatch(html, /つなぐ屋|TSUNAGUYA/);

@@ -7,11 +7,13 @@ import { link } from '../lib/paths';
 
 interface Props {
   title?: string;
+  orderBrand?: boolean;
   description?: string;
 }
 
 const {
   title,
+  orderBrand = false,
   description = '買取のResale Mille（リセールミル）は、ブランド品・時計・貴金属などを丁寧に査定する買取専門店です。',
 } = Astro.props;
 const pageTitle = title
@@ -31,7 +33,7 @@ const pageTitle = title
     <title>{pageTitle}</title>
   </head>
   <body>
-    <Header />
+    <Header orderBrand={orderBrand} />
     <main><slot /></main>
     <Footer />
   </body>

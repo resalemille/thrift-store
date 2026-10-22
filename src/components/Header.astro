@@ -1,12 +1,20 @@
 ---
 import { link } from '../lib/paths';
 import { site } from '../data/site';
+interface Props {
+  orderBrand?: boolean;
+}
+const { orderBrand = false } = Astro.props;
+const headerName = orderBrand
+  ? 'お取り寄せのResale Mille（リセールミル）'
+  : site.name;
 const navigation = [
   ['/', 'TOP'],
   ['/items/', '買取品目'],
   ['/brands/', '買取強化ブランド'],
   ['/cases/', '買取実績'],
   ['/consignment/', '委託販売'],
+  ['/order/', 'お取り寄せ'],
   ['/faq/', 'よくある質問'],
   ['/stores/', '店舗案内'],
   ['/contact/', 'お問い合わせ'],
@@ -15,7 +23,11 @@ const navigation = [
 
 <header class="site-header">
   <div class="header-inner">
-    <a href={link('/')} class="brand-lockup" aria-label={`${site.name} トップ`}>
+    <a
+      href={link('/')}
+      class="brand-lockup"
+      aria-label={`${headerName} トップ`}
+    >
       <svg
         viewBox="0 0 48 48"
         class="brand-mark"
@@ -29,7 +41,9 @@ const navigation = [
         />
       </svg>
       <span
-        ><span class="brand-kicker">買取の</span><strong>Resale Mille</strong
+        ><span class="brand-kicker"
+          >{orderBrand ? 'お取り寄せの' : '買取の'}</span
+        ><strong>Resale Mille</strong
         ><span class="brand-reading">リセールミル</span></span
       >
     </a>
