@@ -1,0 +1,414 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ContentContainer from './ContentContainer.astro';
+import BrandIcon from './BrandIcon.astro';
+import {
+  personalFeatures,
+  businessFeatures,
+  sourcingReviews,
+  courses,
+} from '../data/order';
+import { link } from '../lib/paths';
+interface Props {
+  business?: boolean;
+}
+const { business = false } = Astro.props;
+const title = business
+  ? '副業・個人事業主・法人向け仕入れ代行'
+  : 'お取り寄せ（オーダー）';
+const features = business ? businessFeatures : personalFeatures;
+const examples = [
+  {
+    name: 'ロレックスなどの腕時計',
+    image: 'case-rolex-datejust.webp',
+    text: 'モデルや文字盤、付属品のご希望までお聞かせください。',
+  },
+  {
+    name: 'エルメスなどのブランドバッグ',
+    image: 'case-hermes-birkin.webp',
+    text: '色や素材、サイズ、コンディションからお探しします。',
+  },
+  {
+    name: 'ジュエリー・アクセサリー',
+    image: 'case-diamond-ring.webp',
+    text: 'デザインやサイズ、ご予算に合わせてご提案します。',
+  },
+];
+---
+
+<Layout
+  title={title}
+  orderBrand={!business}
+  description={business
+    ? 'ブランド品の仕入れを専門バイヤーが代行。副業から法人の仕入れ、人材育成までサポートします。'
+    : '憧れの逸品を、あなたのために。専門バイヤーがご希望のブランド品・時計・ジュエリーをお探しします。'}
+>
+  <div class="order-page">
+    <section class="order-hero">
+      <div class="order-hero-inner">
+        <p class="order-wordmark">Resale Mille</p>
+        <p class="order-eyebrow">
+          {business
+            ? 'BRAND SOURCING & BUSINESS SUPPORT'
+            : 'PERSONAL ORDER SERVICE'}
+        </p>
+        <h1>
+          {business
+            ? '憧れのブランド品を卸価格で。'
+            : '憧れの逸品を、あなたのために。'}<br>
+          {business
+            ? '成功へのビジネスをスタート。'
+            : 'オーダーメイドお取り寄せサービス'}
+        </h1>
+        <p class="order-lead">
+          {business
+            ? 'ブランド品仕入れとビジネス成長のパートナー'
+            : '専門バイヤーが、あなたの「欲しい」を世界中からお探しします。'}
+        </p>
+        <a class="order-button" href={link('/contact/')}
+          >{business ? '仕入れについて相談する' : '欲しいお品物を相談する'}<span
+            aria-hidden="true"
+          >
+            →</span
+          ></a
+        >
+      </div>
+    </section>
+    <nav class="order-audiences" aria-label="お取り寄せサービスの対象">
+      <a href={link('/order/')} aria-current={!business ? 'page' : undefined}
+        >個人向けお取り寄せ</a
+      >
+      <a href={link('/sourcing/')} aria-current={business ? 'page' : undefined}
+        >副業・個人事業主・法人向け仕入れ代行</a
+      >
+    </nav>
+    <section
+      class:list={['order-section', { 'order-light': !business }]}
+      aria-labelledby="order-features"
+    >
+      <ContentContainer as="div">
+        <p class="order-eyebrow">OUR STRENGTHS</p>
+        <h2 id="order-features">
+          {business
+            ? 'Resale Milleが選ばれる4つの強み'
+            : 'Resale Milleが選ばれる理由：お取り寄せの強み'}
+        </h2>
+        <div class="order-grid order-features">
+          {features.map((feature) => (
+            <article class="order-card">
+              <BrandIcon name={feature.icon} class="order-icon" />
+              <h3>{feature.title}</h3>
+              <p>{feature.text}</p>
+            </article>
+          ))}
+        </div>
+      </ContentContainer>
+    </section>
+    {business ? (
+      <section class="order-section order-risk" aria-labelledby="order-risks">
+        <ContentContainer as="div" width="reading">
+          <p class="order-eyebrow">SOURCING SUPPORT</p>
+          <h2 id="order-risks">業者オークション入札の悩みとリスク</h2>
+          <ul>
+            <li>売れる商品と、状態や付属品ごとの適正価格の見極めが必要</li>
+            <li>オークションで商品を探す時間、競りに張り付く時間が必要</li>
+            <li>
+              高いオークション参加費・月額料金・入会金、紹介制の審査などが必要
+            </li>
+          </ul>
+          <p class="order-solution">
+            これらのお悩みは、Resale Milleのお取り寄せ（オーダー）で解決！
+          </p>
+          <p>
+            商品の選定から入札まで専門バイヤーにお任せ。ご希望の商材とご予算を伺い、仕入れにかかる時間と負担を抑えます。
+          </p>
+        </ContentContainer>
+      </section>
+    ) : (
+      <section class="order-section" aria-labelledby="order-examples">
+        <ContentContainer as="div">
+          <p class="order-eyebrow">SOURCING COLLECTION</p>
+          <h2 id="order-examples">こんなお品物をお探しします</h2>
+          <p class="order-intro">
+            お取り寄せのご相談例です。掲載写真は取扱品目のイメージで、在庫や入荷を保証するものではありません。
+          </p>
+          <div class="order-grid">
+            {examples.map((example) => (
+              <article class="order-card order-example">
+                <img
+                  src={link(`/images/${example.image}`)}
+                  alt={example.name}
+                  width="1200"
+                  height="1200"
+                  loading="lazy"
+                />
+                <h3>{example.name}</h3>
+                <p>{example.text}</p>
+              </article>
+            ))}
+          </div>
+        </ContentContainer>
+      </section>
+    )}
+    <section class="order-section order-voices" aria-labelledby="order-voices">
+      <ContentContainer as="div">
+        <p class="order-eyebrow">CUSTOMER VOICES</p>
+        <h2 id="order-voices">
+          {business
+            ? '豊富な取引実績とお客様の声'
+            : 'お客様の声（掲載イメージ）'}
+        </h2>
+        <div class="order-grid">
+          {(business
+            ? sourcingReviews
+            : [
+                {
+                  profile: '腕時計をお探しのお客様',
+                  title: '欲しかった一本を、納得して選べました',
+                  body: 'モデルだけでなく状態や付属品まで相談でき、安心してお願いできました。',
+                },
+                {
+                  profile: 'ブランドバッグをお探しのお客様',
+                  title: 'ずっと探していたバッグに出会えました',
+                  body: '色やサイズの細かな希望まで聞いていただき、じっくり選ぶことができました。',
+                },
+                {
+                  profile: 'ジュエリーをお探しのお客様',
+                  title: '予算に合わせた提案がうれしかったです',
+                  body: '価格とコンディションを丁寧に説明していただき、安心して相談できました。',
+                },
+              ]
+          ).map((review) => (
+            <article class="order-card">
+              <p class="order-profile">{review.profile}</p>
+              <h3>「{review.title}」</h3>
+              <p>{review.body}</p>
+            </article>
+          ))}
+        </div>
+      </ContentContainer>
+    </section>
+    {business && (
+      <section class="order-section" aria-labelledby="order-courses">
+        <ContentContainer as="div">
+          <p class="order-eyebrow">COURSES</p>
+          <h2 id="order-courses">あなたに合った選べる3コース</h2>
+          <div class="order-grid">
+            {courses.map((course) => (
+              <article class="order-card order-course">
+                <h3>{course.title}</h3>
+                <p>{course.text}</p>
+                <a
+                  class="order-button"
+                  href={link('/contact/')}
+                  aria-label={`${course.title}について問い合わせる`}
+                >
+                  詳しく見る<span aria-hidden="true"> →</span>
+                </a>
+              </article>
+            ))}
+          </div>
+        </ContentContainer>
+      </section>
+    )}
+    <section
+      class="order-section order-contact"
+      aria-labelledby="order-contact"
+    >
+      <ContentContainer as="div" width="reading"
+        ><p class="order-eyebrow">CONTACT & REQUEST</p>
+        <h2 id="order-contact">お問い合わせ・リクエスト</h2>
+        <p>
+          {business
+            ? 'ご希望の商材や仕入れ量、事業の段階をお聞かせください。あなたに合ったコースをご案内します。'
+            : 'ブランド・モデル名・ご予算・状態など、ご希望をお聞かせください。写真や型番があると、より具体的にお探しできます。'}
+        </p>
+        <a class="order-button" href={link('/contact/')}
+          >お問い合わせ・リクエストはこちら<span aria-hidden="true"> →</span></a
+        ></ContentContainer
+      >
+    </section>
+  </div>
+</Layout>
+<style>
+.order-page {
+  background: #282725;
+  color: #f8f6f0;
+}
+.order-hero {
+  background:
+    radial-gradient(ellipse at top left, #ae986544, transparent 55%),
+    radial-gradient(ellipse at bottom right, #ae986555, transparent 55%),
+    #20201e;
+  border-bottom: 1px solid #ae9865;
+  text-align: center;
+  padding: 72px 24px;
+}
+.order-hero-inner {
+  max-width: 1000px;
+  margin: auto;
+}
+.order-wordmark {
+  font-family: var(--font-serif);
+  font-size: clamp(32px, 5vw, 52px);
+  color: #d7c38f;
+}
+.order-eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: #d7c38f;
+  text-align: center;
+  margin-bottom: 14px;
+}
+h1 {
+  font-family: var(--font-serif);
+  font-size: clamp(24px, 3.2vw, 42px);
+  line-height: 1.65;
+  margin: 24px 0 16px;
+}
+.order-lead {
+  line-height: 1.9;
+}
+.order-audiences {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 24px;
+  border-bottom: 1px solid #655b45;
+}
+.order-audiences a {
+  padding: 12px 20px;
+  border: 1px solid #ae9865;
+  border-radius: 28px;
+  text-align: center;
+}
+.order-audiences a[aria-current] {
+  background: #d7c38f;
+  color: #282725;
+}
+h2 {
+  text-align: center;
+  font-family: var(--font-serif);
+  font-size: clamp(23px, 2.5vw, 32px);
+  line-height: 1.6;
+  margin-bottom: 32px;
+  color: #d7c38f;
+}
+.order-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+.order-features {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: 960px;
+  margin: auto;
+}
+.order-card {
+  border: 1px solid #ae9865;
+  outline: 1px solid #ae9865;
+  outline-offset: -6px;
+  background: #fffdf7;
+  color: #282725;
+  padding: 30px;
+  border-radius: 5px;
+  min-width: 0;
+}
+.order-card h3 {
+  font-family: var(--font-serif);
+  font-size: 21px;
+  line-height: 1.65;
+  margin-bottom: 14px;
+}
+.order-card p,
+.order-section p,
+.order-risk li {
+  line-height: 2;
+}
+.order-card :global(.order-icon) {
+  width: 52px;
+  height: 52px;
+  color: #806934;
+  margin-bottom: 18px;
+}
+.order-light {
+  background: #f8f6f0;
+}
+.order-light h2,
+.order-light .order-eyebrow {
+  color: #715c31;
+}
+.order-intro {
+  text-align: center;
+  margin: -12px auto 28px;
+  max-width: 700px;
+}
+.order-example img {
+  aspect-ratio: 1;
+  object-fit: cover;
+  width: 100%;
+  margin-bottom: 20px;
+}
+.order-voices,
+.order-contact {
+  background: #35332f;
+}
+.order-profile {
+  color: #715c31;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+.order-risk ul {
+  padding-left: 1.4em;
+}
+.order-risk li {
+  padding: 16px 0;
+  border-bottom: 1px solid #655b45;
+}
+.order-solution {
+  color: #d7c38f;
+  font-weight: 700;
+  font-size: 22px;
+  margin: 28px 0 16px;
+}
+.order-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 14px 26px;
+  border-radius: 30px;
+  background: linear-gradient(110deg, #ae9865, #e2d5b5);
+  color: #282725;
+  font-weight: 700;
+  margin-top: 24px;
+  text-align: center;
+}
+.order-course {
+  display: flex;
+  flex-direction: column;
+}
+.order-course p {
+  flex: 1;
+}
+.order-contact {
+  text-align: center;
+}
+@media (max-width: 760px) {
+  .order-hero {
+    padding: 48px 22px;
+  }
+  .order-grid,
+  .order-features {
+    grid-template-columns: 1fr;
+  }
+  .order-card {
+    padding: 26px;
+  }
+  .order-audiences {
+    flex-direction: column;
+    padding: 20px;
+  }
+}
+</style>
