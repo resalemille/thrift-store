@@ -865,6 +865,41 @@ details[open] .chevron {
     width: 110px;
   }
 }
+/* Mobile adjustments are isolated so desktop keeps its existing layout. */
+@media (max-width: 760px) {
+  .consignment-hero .hero-content {
+    min-height: 0;
+    padding: 50px 20px 34px;
+  }
+  .features {
+    padding: 28px 22px;
+  }
+  .features .ornament-title {
+    margin-bottom: 32px;
+  }
+  .feature-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .consignment-reason {
+    padding: 18px 16px;
+  }
+  .feature-grid p {
+    font-size: 14px;
+  }
+  table {
+    min-width: 1600px;
+  }
+  .label-column {
+    width: 12%;
+  }
+  .our-column {
+    width: 25%;
+  }
+  .comparison-mark {
+    flex-shrink: 0;
+  }
+}
 @media (max-width: 680px) {
   .consignment {
     padding-bottom: 28px;
@@ -902,14 +937,13 @@ details[open] .chevron {
     font-size: 23px;
     margin-bottom: 30px;
   }
-  .features,
   .flow,
   .contact {
     padding: 35px 20px;
   }
   .feature-grid {
     grid-template-columns: 1fr;
-    gap: 32px;
+    gap: 24px;
   }
   .feature-grid h3 {
     font-size: 16px;
