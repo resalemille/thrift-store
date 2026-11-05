@@ -38,16 +38,16 @@ const comparisons = [
     label: 'お預かり条件',
     cells: [
       '条件なし。',
-      '100万以上かつロレックス等主要時計ブランドのみ',
-      '30万以上（ヴィンテージを除く）',
-      '100万以上の一部人気モデルのみ',
+      '100万以上かつロレックス等\n主要時計ブランドのみ',
+      '30万以上\n（ヴィンテージを除く）',
+      '100万以上の\n一部人気モデルのみ',
     ],
     marks: ['◎', '○', '○', '○'],
   },
   {
     label: '保管場所',
     cells: [
-      '住所秘匿の保管場所（常駐の専用セキュリティ付き）',
+      '住所秘匿の保管場所\n（常駐の専用セキュリティ付き）',
       '店舗',
       '店舗',
       '店舗',
@@ -58,16 +58,16 @@ const comparisons = [
     label: '手数料',
     cells: [
       '1%〜',
-      '800万円以上で3%（販売価格が不透明で実態は不明）',
-      '7%（販売価格が不透明で実態は不明）',
-      '5%＋消費税額 ※実質15%（販売価格が不透明で実態は不明）',
+      '800万円以上で3%\n（販売価格が不透明で実態は不明）',
+      '7%\n（販売価格が不透明で実態は不明）',
+      '5%＋消費税額 ※実質15%\n（販売価格が不透明で実態は不明）',
     ],
     marks: ['◎', '×', '×', '×'],
   },
   {
     label: '販売価格',
     cells: [
-      'ご相談の上決定（市場で売れる最大金額を目指す）',
+      'ご相談の上決定\n（市場で売れる最大金額を目指す）',
       '販売者が格安に決定',
       '販売者が格安に決定',
       '販売者が格安に決定',
@@ -77,7 +77,7 @@ const comparisons = [
   {
     label: '販売方法',
     cells: [
-      '各ECサイト＋Googlemerchant広告＋SNS広告（一部店頭含む）',
+      '各ECサイト＋Googlemerchant広告\n＋SNS広告（一部店頭含む）',
       '店頭・ECサイト',
       '店頭',
       '店頭・ECサイト',
@@ -205,7 +205,14 @@ const comparisons = [
                       <span class="comparison-mark" aria-hidden="true">
                         {row.marks[index]}
                       </span>
-                      <span>{cell}</span>
+                      <span class="comparison-text">
+                        {cell.split('\n').map((line, lineIndex) => (
+                          <>
+                            {lineIndex > 0 && <br class="comparison-break" />}
+                            {line}
+                          </>
+                        ))}
+                      </span>
                     </span>
                   </td>
                 ))}
@@ -663,6 +670,9 @@ tbody tr:nth-child(3) td:nth-child(2) {
   font-size: 24px;
   font-weight: 400;
 }
+.comparison-break {
+  display: none;
+}
 .table-note {
   margin: 6px 0 0;
   text-align: right;
@@ -888,13 +898,23 @@ details[open] .chevron {
     font-size: 14px;
   }
   table {
-    min-width: 1600px;
+    min-width: 1300px;
   }
   .label-column {
-    width: 12%;
+    width: 20%;
   }
   .our-column {
-    width: 25%;
+    width: 20%;
+  }
+  .comparison-break {
+    display: block;
+  }
+  .cell-content {
+    gap: 6px;
+  }
+  .comparison-text {
+    white-space: nowrap;
+    font-size: 12px;
   }
   .comparison-mark {
     flex-shrink: 0;
@@ -997,7 +1017,7 @@ details[open] .chevron {
     padding-left: 20px;
   }
   .contact {
-    padding-top: 105px;
+    padding-top: 140px;
   }
   .contact-watch {
     width: 105px;

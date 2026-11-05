@@ -32,3 +32,41 @@ test('横長の比較表でも全社・全項目とキーボードスクロー�
     assert.equal([...row[1].matchAll(/<t[hd]\b/g)].length, 5);
   }
 });
+
+test('個人向けお取り寄せの見出しとリードは指定位置で改行できる', () => {
+  const order = readFileSync(
+    new URL('../dist/order/index.html', import.meta.url),
+    'utf8',
+  );
+  const hero = order.match(/<h1[^>]*>([\s\S]*?)<\/h1>/)[1];
+  assert.match(hero, /<span[^>]*>憧れの逸品を、あなたのために。<\/span>/);
+  assert.match(hero, /<span[^>]*>オーダーメイドお取り寄せサービス<\/span>/);
+  assert.match(
+    order,
+    /「欲しい」を<br class="order-mobile-break"[^>]*>世界中から/,
+  );
+  assert.match(
+    order,
+    /Resale Milleが選ばれる理由：<br class="order-mobile-break"[^>]*>お取り寄せの強み/,
+  );
+  const sourcing = readFileSync(
+    new URL('../dist/sourcing/index.html', import.meta.url),
+    'utf8',
+  );
+  assert.doesNotMatch(sourcing, /class="personal-order-title"/);
+});
+
+test('比較表は文節の区切りで2行に分け、元の比較内容を保持する', () => {
+  assert.match(
+    consignment,
+    /100万以上かつロレックス等<br class="comparison-break"[^>]*>主要時計ブランドのみ/,
+  );
+  const cells = [
+    ...consignment.matchAll(
+      /<span class="comparison-text"[^>]*>([\s\S]*?)<\/span>/g,
+    ),
+  ];
+  assert.equal(cells.length, 20);
+  for (const [, cell] of cells)
+    assert.ok([...cell.matchAll(/<br\b/g)].length <= 1);
+});
