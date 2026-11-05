@@ -52,18 +52,31 @@ const examples = [
             ? 'BRAND SOURCING & BUSINESS SUPPORT'
             : 'PERSONAL ORDER SERVICE'}
         </p>
-        <h1>
-          {business
-            ? '憧れのブランド品を卸価格で。'
-            : '憧れの逸品を、あなたのために。'}<br>
-          {business
-            ? '成功へのビジネスをスタート。'
-            : 'オーダーメイドお取り寄せサービス'}
+        <h1 class:list={{ 'personal-order-title': !business }}>
+          {business ? (
+            <>
+              憧れのブランド品を卸価格で。
+              <br />
+              成功へのビジネスをスタート。
+            </>
+          ) : (
+            <>
+              <span>憧れの逸品を、あなたのために。</span>
+              <br />
+              <span>オーダーメイドお取り寄せサービス</span>
+            </>
+          )}
         </h1>
         <p class="order-lead">
-          {business
-            ? 'ブランド品仕入れとビジネス成長のパートナー'
-            : '専門バイヤーが、あなたの「欲しい」を世界中からお探しします。'}
+          {business ? (
+            'ブランド品仕入れとビジネス成長のパートナー'
+          ) : (
+            <>
+              専門バイヤーが、あなたの「欲しい」を
+              <br class="order-mobile-break" />
+              世界中からお探しします。
+            </>
+          )}
         </p>
         <a class="order-button" href={link('/contact/')}
           >{business ? '仕入れについて相談する' : '欲しいお品物を相談する'}<span
@@ -88,10 +101,19 @@ const examples = [
     >
       <ContentContainer as="div">
         <p class="order-eyebrow">OUR STRENGTHS</p>
-        <h2 id="order-features">
-          {business
-            ? 'Resale Milleが選ばれる4つの強み'
-            : 'Resale Milleが選ばれる理由：お取り寄せの強み'}
+        <h2
+          id="order-features"
+          class:list={{ 'personal-features-title': !business }}
+        >
+          {business ? (
+            'Resale Milleが選ばれる4つの強み'
+          ) : (
+            <>
+              Resale Milleが選ばれる理由：
+              <br class="order-mobile-break" />
+              お取り寄せの強み
+            </>
+          )}
         </h2>
         <div class="order-grid order-features">
           {features.map((feature) => (
@@ -266,6 +288,9 @@ h1 {
   line-height: 1.65;
   margin: 24px 0 16px;
 }
+.order-mobile-break {
+  display: none;
+}
 .order-lead {
   line-height: 1.9;
 }
@@ -396,6 +421,21 @@ h2 {
   text-align: center;
 }
 @media (max-width: 760px) {
+  .personal-order-title {
+    font-size: clamp(15px, 4.3vw, 28px);
+  }
+  .personal-order-title span {
+    white-space: nowrap;
+  }
+  .personal-order-title + .order-lead {
+    font-size: clamp(12px, 3.5vw, 16px);
+  }
+  .order-mobile-break {
+    display: block;
+  }
+  .personal-features-title {
+    font-size: clamp(19px, 5.4vw, 28px);
+  }
   .order-hero {
     padding: 48px 22px;
   }
