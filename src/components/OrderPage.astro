@@ -136,34 +136,54 @@ const examples = [
           <p class="risk-intro">
             仕入れを始めたい。でも、こんな不安はありませんか？
           </p>
-          <div class="risk-conversation">
-            <img
-              class="risk-illustration"
-              src={link('/images/sourcing/auction-concerns.webp')}
-              alt=""
-              width="1536"
-              height="1024"
-              loading="lazy"
-            />
-            <ul class="risk-questions" aria-label="仕入れでよくある3つのお悩み">
-              <li>
+          <ul class="risk-questions" aria-label="仕入れでよくある3つのお悩み">
+            <li>
+              <img
+                class="risk-illustration"
+                src={link('/images/sourcing/auction-concerns.webp')}
+                alt=""
+                width="900"
+                height="600"
+                loading="lazy"
+              />
+              <div class="risk-bubble">
                 <h3>「この価格で仕入れて、本当に売れる？」</h3>
                 <p>
                   状態や付属品ごとの適正価格が分からず、入札に踏み切れない…。
                 </p>
-              </li>
-              <li>
+              </div>
+            </li>
+            <li>
+              <img
+                class="risk-illustration"
+                src={link('/images/sourcing/auction-time.webp')}
+                alt=""
+                width="900"
+                height="600"
+                loading="lazy"
+              />
+              <div class="risk-bubble">
                 <h3>「商品探しや入札に、時間を取られそう…」</h3>
                 <p>本業もあるのに、競りに張り付く時間まで確保できるかな？</p>
-              </li>
-              <li>
+              </div>
+            </li>
+            <li>
+              <img
+                class="risk-illustration"
+                src={link('/images/sourcing/auction-fees.webp')}
+                alt=""
+                width="900"
+                height="600"
+                loading="lazy"
+              />
+              <div class="risk-bubble">
                 <h3>「始める前から、費用や審査のハードルが高い？」</h3>
                 <p>
                   参加費・月額料金・入会金に、紹介制の審査。自分で全部準備するのは大変…。
                 </p>
-              </li>
-            </ul>
-          </div>
+              </div>
+            </li>
+          </ul>
           <div class="risk-answer">
             <p class="risk-answer-label">Resale Milleからのご提案</p>
             <p class="order-solution">
@@ -428,12 +448,6 @@ h2 {
   text-align: center;
   margin: -12px 0 32px;
 }
-.risk-conversation {
-  display: grid;
-  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-  gap: 28px;
-  align-items: center;
-}
 .risk-illustration {
   width: 100%;
   height: auto;
@@ -441,11 +455,17 @@ h2 {
 }
 .risk-questions {
   display: grid;
-  gap: 18px;
+  gap: 32px;
   padding: 0;
   list-style: none;
 }
 .risk-questions li {
+  display: grid;
+  grid-template-columns: minmax(0, 0.6fr) minmax(0, 1.4fr);
+  gap: 28px;
+  align-items: center;
+}
+.risk-bubble {
   position: relative;
   padding: 22px 24px;
   background: #f8f6f0;
@@ -453,7 +473,7 @@ h2 {
   border: 1px solid #ae9865;
   border-radius: 12px;
 }
-.risk-questions li::before {
+.risk-bubble::before {
   content: "";
   position: absolute;
   left: -9px;
@@ -493,24 +513,20 @@ h2 {
   margin: 12px 0 16px;
 }
 @media (max-width: 760px) {
-  .risk-conversation {
+  .risk-questions li {
     grid-template-columns: minmax(0, 1fr);
-    gap: 24px;
+    gap: 20px;
   }
   .risk-illustration {
-    max-width: 300px;
+    max-width: 240px;
     margin: auto;
   }
-  .risk-questions li::before {
-    display: none;
-  }
-  .risk-questions li:first-child::before {
-    display: block;
+  .risk-bubble::before {
     top: -9px;
     left: calc(50% - 8px);
     transform: rotate(135deg);
   }
-  .risk-questions li,
+  .risk-bubble,
   .risk-answer {
     padding: 20px;
   }

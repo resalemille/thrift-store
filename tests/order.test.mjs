@@ -81,5 +81,17 @@ test('事業者の悩みを3つの疑問とバイヤーからの提案で案内�
     section,
     /src="\/images\/sourcing\/auction-concerns.webp"[^>]*alt=""/,
   );
-  assert.doesNotMatch(page('order'), /auction-concerns.webp|risk-conversation/);
+  const images = [...section.matchAll(/<img[^>]*src="([^"]+)"/g)].map(
+    (match) => match[1],
+  );
+  assert.equal(images.length, 3);
+  assert.equal(new Set(images).size, 3);
+  for (const row of section.matchAll(/<li[^>]*>([\s\S]*?)<\/li>/g)) {
+    assert.match(row[1], /<img/);
+    assert.match(row[1], /<h3/);
+  }
+  assert.doesNotMatch(
+    page('order'),
+    /auction-concerns.webp|auction-time.webp|auction-fees.webp/,
+  );
 });
