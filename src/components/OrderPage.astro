@@ -133,19 +133,47 @@ const examples = [
         <ContentContainer as="div" width="reading">
           <p class="order-eyebrow">SOURCING SUPPORT</p>
           <h2 id="order-risks">業者オークション入札の悩みとリスク</h2>
-          <ul>
-            <li>売れる商品と、状態や付属品ごとの適正価格の見極めが必要</li>
-            <li>オークションで商品を探す時間、競りに張り付く時間が必要</li>
-            <li>
-              高いオークション参加費・月額料金・入会金、紹介制の審査などが必要
-            </li>
-          </ul>
-          <p class="order-solution">
-            これらのお悩みは、Resale Milleのお取り寄せ（オーダー）で解決！
+          <p class="risk-intro">
+            仕入れを始めたい。でも、こんな不安はありませんか？
           </p>
-          <p>
-            商品の選定から入札まで専門バイヤーにお任せ。ご希望の商材とご予算を伺い、仕入れにかかる時間と負担を抑えます。
-          </p>
+          <div class="risk-conversation">
+            <img
+              class="risk-illustration"
+              src={link('/images/sourcing/auction-concerns.webp')}
+              alt=""
+              width="1536"
+              height="1024"
+              loading="lazy"
+            />
+            <ul class="risk-questions" aria-label="仕入れでよくある3つのお悩み">
+              <li>
+                <h3>「この価格で仕入れて、本当に売れる？」</h3>
+                <p>
+                  状態や付属品ごとの適正価格が分からず、入札に踏み切れない…。
+                </p>
+              </li>
+              <li>
+                <h3>「商品探しや入札に、時間を取られそう…」</h3>
+                <p>本業もあるのに、競りに張り付く時間まで確保できるかな？</p>
+              </li>
+              <li>
+                <h3>「始める前から、費用や審査のハードルが高い？」</h3>
+                <p>
+                  参加費・月額料金・入会金に、紹介制の審査。自分で全部準備するのは大変…。
+                </p>
+              </li>
+            </ul>
+          </div>
+          <div class="risk-answer">
+            <p class="risk-answer-label">Resale Milleからのご提案</p>
+            <p class="order-solution">
+              これらのお悩みは、Resale Milleのお取り寄せ（オーダー）で解決！
+            </p>
+            <p>
+              「商品の選定から入札まで、専門バイヤーにお任せください。」
+              ご希望の商材とご予算を伺い、仕入れにかかる時間と負担を抑えます。
+            </p>
+          </div>
         </ContentContainer>
       </section>
     ) : (
@@ -396,18 +424,96 @@ h2 {
   font-size: 13px;
   margin-bottom: 16px;
 }
-.order-risk ul {
-  padding-left: 1.4em;
+.risk-intro {
+  text-align: center;
+  margin: -12px 0 32px;
 }
-.order-risk li {
-  padding: 16px 0;
-  border-bottom: 1px solid #655b45;
+.risk-conversation {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 28px;
+  align-items: center;
+}
+.risk-illustration {
+  width: 100%;
+  height: auto;
+  border-radius: 50% 50% 12px 12px;
+}
+.risk-questions {
+  display: grid;
+  gap: 18px;
+  padding: 0;
+  list-style: none;
+}
+.risk-questions li {
+  position: relative;
+  padding: 22px 24px;
+  background: #f8f6f0;
+  color: #282725;
+  border: 1px solid #ae9865;
+  border-radius: 12px;
+}
+.risk-questions li::before {
+  content: "";
+  position: absolute;
+  left: -9px;
+  top: 28px;
+  width: 16px;
+  height: 16px;
+  background: #f8f6f0;
+  border-left: 1px solid #ae9865;
+  border-bottom: 1px solid #ae9865;
+  transform: rotate(45deg);
+}
+.risk-questions h3 {
+  font-family: var(--font-serif);
+  font-size: 19px;
+  line-height: 1.6;
+  color: #715c31;
+  margin-bottom: 8px;
+}
+.risk-questions p {
+  font-size: 14px;
+}
+.risk-answer {
+  margin-top: 36px;
+  padding: 28px;
+  border: 1px solid #ae9865;
+  background: #35332f;
+}
+.order-risk .risk-answer-label {
+  color: #d7c38f;
+  font-size: 13px;
+  letter-spacing: 0.08em;
 }
 .order-solution {
   color: #d7c38f;
   font-weight: 700;
   font-size: 22px;
-  margin: 28px 0 16px;
+  margin: 12px 0 16px;
+}
+@media (max-width: 760px) {
+  .risk-conversation {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+  .risk-illustration {
+    max-width: 300px;
+    margin: auto;
+  }
+  .risk-questions li::before {
+    display: none;
+  }
+  .risk-questions li:first-child::before {
+    display: block;
+    top: -9px;
+    left: calc(50% - 8px);
+    transform: rotate(135deg);
+  }
+  .risk-questions li,
+  .risk-answer {
+    padding: 20px;
+  }
 }
 .order-button {
   display: inline-flex;
