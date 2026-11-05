@@ -46,3 +46,19 @@ test('仕入れの3つの悩み、指定の口コミ、全コースの問い合�
   );
   assert.equal([...courses.matchAll(/href="\/contact\/"/g)].length, 3);
 });
+
+test('両ページの強みカードはアイコンと見出しを同じ行にまとめる', () => {
+  for (const path of ['order', 'sourcing']) {
+    const html = page(path);
+    const headings = [
+      ...html.matchAll(
+        /<div class="order-feature-heading"[^>]*>([\s\S]*?)<\/div>/g,
+      ),
+    ];
+    assert.equal(headings.length, 4, path);
+    for (const [, heading] of headings) {
+      assert.match(heading, /<svg[^>]+class="[^"]*order-icon/);
+      assert.match(heading, /<h3[^>]*>[^<]+<\/h3>/);
+    }
+  }
+});

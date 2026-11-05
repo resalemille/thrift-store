@@ -96,8 +96,10 @@ const examples = [
         <div class="order-grid order-features">
           {features.map((feature) => (
             <article class="order-card">
-              <BrandIcon name={feature.icon} class="order-icon" />
-              <h3>{feature.title}</h3>
+              <div class="order-feature-heading">
+                <BrandIcon name={feature.icon} class="order-icon" />
+                <h3>{feature.title}</h3>
+              </div>
               <p>{feature.text}</p>
             </article>
           ))}
@@ -326,11 +328,21 @@ h2 {
 .order-risk li {
   line-height: 2;
 }
-.order-card :global(.order-icon) {
+.order-feature-heading {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+.order-feature-heading h3 {
+  min-width: 0;
+  margin-bottom: 0;
+}
+.order-feature-heading :global(.order-icon) {
   width: 52px;
   height: 52px;
   color: #806934;
-  margin-bottom: 18px;
+  flex: 0 0 52px;
 }
 .order-light {
   background: #f8f6f0;
