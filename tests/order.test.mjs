@@ -62,3 +62,36 @@ test('両ページの強みカードはアイコンと見出しを同じ行に�
     }
   }
 });
+
+test('事業者の悩みを3つの疑問とバイヤーからの提案で案内する', () => {
+  const html = page('sourcing');
+  const section = html.match(
+    /<section[^>]*aria-labelledby="order-risks"[^>]*>([\s\S]*?)<\/section>/,
+  )[1];
+  assert.equal([...section.matchAll(/<h3\b/g)].length, 3);
+  for (const text of [
+    '本当に売れる？',
+    '時間を取られそう',
+    '費用や審査',
+    'Resale Milleからのご提案',
+    '専門バイヤーにお任せください。',
+  ])
+    assert.ok(section.includes(text), text);
+  assert.match(
+    section,
+    /src="\/images\/sourcing\/auction-concerns.webp"[^>]*alt=""/,
+  );
+  const images = [...section.matchAll(/<img[^>]*src="([^"]+)"/g)].map(
+    (match) => match[1],
+  );
+  assert.equal(images.length, 3);
+  assert.equal(new Set(images).size, 3);
+  for (const row of section.matchAll(/<li[^>]*>([\s\S]*?)<\/li>/g)) {
+    assert.match(row[1], /<img/);
+    assert.match(row[1], /<h3/);
+  }
+  assert.doesNotMatch(
+    page('order'),
+    /auction-concerns.webp|auction-time.webp|auction-fees.webp/,
+  );
+});
